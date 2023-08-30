@@ -2,7 +2,8 @@
 #include <vector>
 
 using namespace std;
-
+//틀릴 수 있는 케이스를 점검하기
+//작은 반복횟수여서 이중 for문 사용 가능
 vector<int> solution(vector<int> lottos, vector<int> win_nums) {
     vector<int> answer;
     int zero=0, correct=0;
