@@ -1,3 +1,8 @@
+//이분탐색
+//나무의 길이가 최대 20억을 넘어갈 수 있으므로 순차탐색으로는 시간초과를 절대 피할 수 없음
+//whlie문의 종료 조건 체크
+//answer가 바뀌는 조건 체크
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
