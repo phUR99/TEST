@@ -1,3 +1,4 @@
+//이분 탐색을 사용하되, binary_search는 true / false 만 반환하므로 upper_bound와 lower_bound를 이용해서 중복되는 원소의 개수를 반환할 수 있다.
 #include <iostream>
 #include <vector>
 #include <algorithm>
