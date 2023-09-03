@@ -16,6 +16,7 @@ int main(void) {
 	for (int i = 0; i < 10; i++)
 	{
 		cin >> a >> b;
+		//STL에서 reverse(arr+a, arr+b+1)을 사용 가
 		for (int j = a; j <= b; j++)
 		{
 			stk.push(arr[j]);
