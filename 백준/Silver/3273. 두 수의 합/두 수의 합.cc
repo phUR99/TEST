@@ -3,7 +3,8 @@
 #include <algorithm>
 using namespace std;
 int a[2000001] = {};
-
+//중복되는 i를 생각을 안해서 틀린 문제
+//i = x-i 일 경우 생기는 예외를 제거합시다
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
