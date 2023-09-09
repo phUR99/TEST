@@ -4,7 +4,7 @@
 #include <deque>
 #include <vector>
 #include <stack>
-
+//1. 어디서 시작하는 것이 더 유리한가?
 using namespace std;
 
 int main(void) {
