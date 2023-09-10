@@ -7,6 +7,9 @@
 #define X first
 #define Y second
 using namespace std;
+//1. 하나의 변수가 다른 하나의 변수에 영향을 주는 상황. 영향이 없는 변수를 먼저 해결한 후에 영향을 받는 변수를 관찰하자.
+//2. 두 종류의 BFS -> 두 번의 BFS로 고민하기..
+//3. 배열의 초기화는 for문으로 쓰거나 fill로 채워줘야 한다. 이거 안되서 고생했음.
 
 char map[1001][1001];
 int Jtime[1001][1001];
