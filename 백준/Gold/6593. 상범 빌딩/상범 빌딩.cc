@@ -8,7 +8,9 @@
 #define X first
 #define Y second
 using namespace std;
-
+//break를 걸어주면 틀린다. 왜일까
+//tuple의 사용법 get<n>(name)
+//tuple은 tuple header를 불러와야 한다.
 char building[31][31][31];
 int t[31][31][31];
 
