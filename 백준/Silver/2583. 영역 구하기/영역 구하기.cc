@@ -8,6 +8,7 @@
 #define Y second
 using namespace std;
 //x/y축이 되게 헷갈린다 잘 파악해서 x축 y축을 사용하자.
+//큐에 넣고 빼기 전에 visited = true로 만드는 거 잊지 않기
 bool map[101][101];
 bool visited[101][101];
 
