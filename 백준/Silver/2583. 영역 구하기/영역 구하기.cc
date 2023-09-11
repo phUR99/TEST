@@ -7,7 +7,7 @@
 #define X first
 #define Y second
 using namespace std;
-
+//x/y축이 되게 헷갈린다 잘 파악해서 x축 y축을 사용하자.
 bool map[101][101];
 bool visited[101][101];
 
