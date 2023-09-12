@@ -8,7 +8,7 @@
 #define X first
 #define Y second
 using namespace std;
-
+//3차원의 형식으로 바라보기
 char map[1001][1001];
 int dist[1001][1001][2];
 
