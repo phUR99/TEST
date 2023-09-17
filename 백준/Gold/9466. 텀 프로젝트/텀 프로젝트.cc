@@ -3,10 +3,8 @@
 #include <algorithm>
 #include <stack>
 #include <vector>
-#include <queue>
-#include <tuple>
-#define X first
-#define Y second
+//이전에 방문했던 학생을 방문했을 때, 이 방문했던 학생이 사이클에 포함되는 것을 알 수 있다면, 이번에 방문하는 학생은 사이클에 포함되지 않음을 알 수 있다.
+//방문 표시를 하나만 하는 것이 아니라 값을 분리해서 하는 것에 주안점을 주고 생각해보자.
 using namespace std;
 int arr[100005];
 int state[100005];
