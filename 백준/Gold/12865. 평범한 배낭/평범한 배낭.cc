@@ -36,6 +36,8 @@ int main(void) {
 	sort(vec.begin(), vec.end());
 	for (int i = 0; i < n; i++)
 	{
+		//중복되는 배낭을 추가하지 않기 위해서 k부터 내림차순으로 더해준다.
+		
 		for (int j = k; j >= vec[i].first; j--) {
 			d[j] = max(d[j - vec[i].first] + vec[i].second, d[j]);
 
