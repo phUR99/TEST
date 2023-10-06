@@ -12,7 +12,16 @@ using namespace std;
 #define ll long long
 int d[100050];
 vector<pair<int, int>> vec;
-
+// 0-1 knapsack problem
+/*
+	            if(W[row] > limit){
+                DP[row][limit] = DP[row-1][limit];
+            }
+            //2. 담을 수 있는 경우
+            else{
+                DP[row][limit] = max(DP[row-1][limit - W[row]] + V[row]  ,  DP[row-1][limit]);
+            }
+/*
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
