@@ -13,6 +13,7 @@ using namespace std;
 ll d[205][205];
 int di = 1'000'000'000;
 //d[1][k]를 엄청 헤맸다.
+//피라미드 식으로 구현 가능
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
