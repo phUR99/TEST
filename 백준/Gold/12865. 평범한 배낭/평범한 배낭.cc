@@ -21,7 +21,7 @@ vector<pair<int, int>> vec;
             else{
                 DP[row][limit] = max(DP[row-1][limit - W[row]] + V[row]  ,  DP[row-1][limit]);
             }
-/*
+*/
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
