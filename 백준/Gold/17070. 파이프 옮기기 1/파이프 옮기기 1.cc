@@ -8,7 +8,7 @@
 #include <math.h>
 #include <tuple>
 #include <numeric>
-
+//d : 0 가로 1 세로 2 대각선일 때 이 방향일 때 올수 있는 이전의 것들의 합.
 using namespace std;
 #define ll long long
 int d[20][20][3];
@@ -31,8 +31,11 @@ int main(void) {
 		for (int j = 3; j <= n; j++)
 		{
 			if (a[i][j] == 0) {
+				// 현재 방향이 가로가 될라면 이전 방향이 가로거나 대각선
 				d[i][j][0] = d[i][j - 1][0] + d[i][j - 1][2];
+				// 현재 방향이 세로가 될라면 이전 방향이 세로거나 대각선
 				d[i][j][1] = d[i - 1][j][1] + d[i - 1][j][2];
+				// 대각선 3방향이 0이 아니라면 대각선은 모든 방향에서 할 수 있음.
 				if(a[i-1][j] ==0 && a[i][j-1] ==0) d[i][j][2] = d[i - 1][j - 1][0] + d[i - 1][j - 1][1] + d[i - 1][j - 1][2];
 			}
 		}
