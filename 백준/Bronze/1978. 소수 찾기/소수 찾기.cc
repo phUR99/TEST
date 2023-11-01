@@ -6,38 +6,29 @@
 #include <stack>
 #include <queue>
 #include <math.h>
+#include <tuple>
+#include <numeric>
+
 using namespace std;
+#define ll long long
+bool isprime(int n) {
+	if (n == 1) return 0;
+	for (int i = 2; i * i <= n; i++) {
+		if (n % i == 0) return 0;
+	}
+	return 1;
+}
 
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	vector<int> num;
-	int n;
-	cin >> n;
-	while (n--)
+	int t; cin >> t;
+	int ans = 0;
+	while (t--)
 	{
-		int temp; cin >> temp;
-		num.push_back(temp);
+		int temp;
+		cin >> temp;
+		ans += isprime(temp);
 	}
-
-	int cnt = 0;
-	for (auto i : num)
-	{
-		if (i == 1) continue;
-		if (i == 2 || i == 3) {
-			cnt++;
-			continue;
-		}
-		bool check = false;
-		for (int j = 2; j <= sqrt(i); j++)
-		{
-			if (i % j == 0) {
-				check = true;
-				break;
-			}
-		}
-		if (!check) cnt++;
-	
-	}
-	cout << cnt;
+	cout << ans;
 }
