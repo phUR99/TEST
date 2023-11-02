@@ -8,7 +8,8 @@
 #include <math.h>
 #include <tuple>
 #include <numeric>
-
+// 나눠줄 수 있는 가장 큰 과자 찾기? -> 최대 몇 m의 과자를 줄 수 있는가? parametric search로 변환해서 생각하기
+// 함수가 분명 감소함수의 형태를 띄고 있으니 가능한 접근이다.
 using namespace std;
 #define ll long long
 int m, n;
@@ -22,6 +23,7 @@ bool solve(int x) {
 		cnt += l[i] / x;
 	}
 	return cnt >= m;
+	//m개 보다 크게 나올 수 있는가?
 }
 
 int main(void) {
