@@ -34,7 +34,7 @@ int main() {
     }
     sort(ab.begin(), ab.end());
     sort(cd.begin(), cd.end());
-    
+    // 0000..일 경우 답의 개수가 엄청나게 늘어날 수 있다. ll으로 선언해야 하는 이유
     ll ans = 0;
     for (auto i : ab)
     {
