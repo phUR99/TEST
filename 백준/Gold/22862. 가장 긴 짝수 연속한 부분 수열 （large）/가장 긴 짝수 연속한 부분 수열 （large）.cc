@@ -31,6 +31,7 @@ int main() {
     if (x[ed] % 2 == 1) cnt++;
     for (int st = 0; st < n; st++)
     {
+        //idx 판단 잘하기. k - cnt >0이 안되는 이유는 좌항은 ed +1 일 때를 보고 있는 데 우항은 ed일 때를 관찰하고 있어서 안된다!!
         while (ed + 1 != n && k - cnt -x[ed+1]%2 >= 0) {
             ed++;         
             if (x[ed] % 2 == 1) { 
