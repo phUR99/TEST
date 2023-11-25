@@ -41,6 +41,8 @@ int main() {
         }
     }
     sort(bs.begin(), bs.end());
+    //ans가 int 범위를 넘어갈 수 있다.
+    //ex : 1000 0, 0, 0 ... 0 이런 식으로 할 경우 벡터의 개수가 상당히 많아져서 ans가 커질 수 있음.
     long long ans = 0;
     for (int i = 0; i < as.size(); i++)
     {
