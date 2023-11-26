@@ -15,6 +15,8 @@ int main() {
     fill(base, base + n, 1);
     while (m--)
     {
+        //x는 상위 또는 중간 부품이므로 base를 체크하여 결과값 출력할 때는 출력하지 않게 한다
+        // x-> (y, k)의 형태로 그래프를 만든다.
         int x, y, k;
         cin >> x >> y >> k;
         base[x] = 0;
@@ -29,6 +31,7 @@ int main() {
         int cur = q.front(); q.pop();
         for (auto [nxt, c] : adj[cur])
         {
+            // idx =0인 그래프를 탐색하면서 k의 가중치와 cnt를 곱해준다.
             cnt[nxt] += c * cnt[cur];
             idx[nxt]--;
             if (idx[nxt] == 0) q.push(nxt);
