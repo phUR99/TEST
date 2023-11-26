@@ -4,9 +4,11 @@ using namespace std;
 #define ll long long
 
 int n;
+//노드의 부모를 찾아줄 배열 p
 int p[100'001];
+//트리 adj
 vector<int> adj[100'001];
-
+//dfs를 통해서 부모를 찾는다.
 void dfs(int cur) {
     for (int nxt : adj[cur])
     {
