@@ -4,6 +4,8 @@ using namespace std;
 #define ll long long
 #define X first
 #define Y second
+//idea: 한 정점에 대해서 이분 그래프가 되고 싶다면 1 x -> 2 y ->3 ->x 의 형태로 표현할 수 있어야 한다.
+//bfs를 실행해서 정점에 대해서 체크
 
 
 vector<int> adj[20005];
