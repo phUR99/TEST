@@ -1,33 +1,22 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-int a[2000001] = {};
-//중복되는 i를 생각을 안해서 틀린 문제
-//i = x-i 일 경우 생기는 예외를 제거합시다
-int main(void) {
+bool chk[2000005];
+int arr[100005];
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	int n;
+	int n, x;
+	int ans = 0;
 	cin >> n;
-	int tmp;
-	int cnt = 0;
 	for (int i = 0; i < n; i++)
 	{
-		cin >> tmp;
-		a[tmp] = 1;
+		cin >> arr[i];
 	}
-	int x;
 	cin >> x;
-	for (int i = 1; i < x; i++)
+	for (int i = 0; i < n; i++)
 	{
-		if (a[i] == 1) 
-			if (a[x - i] == 1 && i != x-i) 
-			{
-				a[i] = 0;
-				a[x - i] = 0;
-				cnt++;
-			}
+		if (x - arr[i] > 0 && chk[x - arr[i]]) ans++;
+		chk[arr[i]] = true;
 	}
-	cout << cnt;
+	cout << ans;
 }
