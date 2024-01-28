@@ -1,26 +1,19 @@
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
+int arr[10];
+
 int main() {
-	string str = "0123456789";
-	long long int product = 1;
-	int N;
-	for (int i = 0; i < 3; i++)
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int a, b, c;
+	cin >> a >> b >> c;
+	string str;
+	str = to_string(a * b * c);
+
+	for (auto e : str) arr[e - '0']++;
+	for (int i = 0; i < 10; i++)
 	{
-		cin >> N;
-
-		product *= N;
+		cout << arr[i] << '\n';
 	}
-
-	string strProduct = to_string(product);
 	
-	for (auto i : str)
-	{
-		N = 0;
-		for (auto j : strProduct) {
-			if (i == j) N++;
-		}
-		cout << N << '\n';
-	}
-
 }
