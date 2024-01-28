@@ -15,6 +15,7 @@ int main() {
 	cin >> x;
 	for (int i = 0; i < n; i++)
 	{
+		// x - arr[i] <=0이 되는 경우를 제외하고 나머지 경우를 확인 x= 2arri가 되는 경우는 자연스럽게 제거됨.
 		if (x - arr[i] > 0 && chk[x - arr[i]]) ans++;
 		chk[arr[i]] = true;
 	}
