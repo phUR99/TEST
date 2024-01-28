@@ -1,21 +1,15 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
+using namespace std;
 
 int main() {
-    int num,min,N ;
-    std::vector<int> vec;
-    
-    std::cin >> num >> min;
-
-    for (int i = 1; i <= num; i++) {
-        std::cin >> N;
-        vec.push_back(N);
-
-
-    }
-    for (auto i : vec){
-        if (i < min) std::cout << i << " ";
-    }
-
-
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int n, x, tmp;
+	cin >> n >> x;
+	while (n--)
+	{
+		cin >> tmp;
+		if (tmp < x) cout << tmp << ' ';
+	}
+	return 0;
 }
