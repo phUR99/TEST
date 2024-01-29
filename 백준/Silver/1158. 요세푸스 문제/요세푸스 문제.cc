@@ -1,33 +1,50 @@
-#include <iostream>
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <list>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
 
+int arr[5005];
+int nxt[5005];
+int pre[5005];
 
-
-int main(void) {
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	queue<int> q;
 	int n, k;
 	cin >> n >> k;
-	cout << "<";
-	for (int i = 1; i <=n ; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		q.push(i);
+		arr[i] = i;
+		nxt[i] = i + 1;
+		pre[i] = i - 1;
+		if (i == n) nxt[i] = 1;
+		if (i == 1) pre[i] = n;
 	}
-	while (!q.empty())
+	int t = 1;
+	if (n == 1) {
+		cout << "<1>";
+		return 0;
+	}
+	vector<int> ans;
+
+	while (true)
 	{
-		for (int i = 1; i < k; i++) {
-			q.push(q.front());
-			q.pop();
+		if (ans.size() == n) break;
+
+		for (int i = 1; i <= k; i++)
+		{			
+			if (i == k) {
+				ans.push_back(arr[t]);
+				nxt[pre[t]] = nxt[t];
+				pre[nxt[t]] = pre[t];
+			}
+			t = nxt[t];
 		}
-		cout << q.front();
-		q.pop();
-		if (!q.empty()) cout << ", ";
 	}
-	cout << ">";
+	cout << "<";
+	for (int i = 0; i < n; i++)
+	{
+		cout << ans[i];
+		if (i != n - 1) cout << ", ";
+		else cout << ">";
+	}
+	return 0;
 }
