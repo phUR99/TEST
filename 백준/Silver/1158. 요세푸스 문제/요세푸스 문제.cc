@@ -21,12 +21,10 @@ int main(void) {
 	}
 	while (!q.empty())
 	{
-		//큐를 이용해서 k번 만큼 회전시킨다고 생각하기
 		for (int i = 1; i < k; i++) {
 			q.push(q.front());
 			q.pop();
 		}
-		//이후 반드시 사용된 값을 제거시킨다
 		cout << q.front();
 		q.pop();
 		if (!q.empty()) cout << ", ";
