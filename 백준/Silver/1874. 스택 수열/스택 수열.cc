@@ -5,9 +5,8 @@
 #include <stack>
 #include <vector>
 using namespace std;
-// 1. 사용한 값을 추가하지 않을 방법 -> pushed arr를 선언하여 chk된 element는 stk에 push하지 않게 함.
-// 2. 전부 다 사용했는 지 확인할 방법 -> cnt 역할의 sum을 이용하여 sum이 n과 같은지를 체크. 같지 않다면 전부 사용된 것이 아니므로 NO를 출력하게 한다.
-// 3. 그 외는 stk의 성질을 이용해서 구현하기
+
+
 bool pushed[100001] = {false};
 
 int main(void) {
