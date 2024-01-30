@@ -10,9 +10,13 @@
 
 자료 구조, 스택
 
+### 제출 일자
+
+2023년 9월 7일 20:22:46
+
 ### 문제 설명
 
-<p><img alt="sook-001(1).jpg" src=""></p>
+<p><img alt="sook-001(1).jpg" src="https://upload.acmicpc.net/ca458f07-d3b3-436f-a996-49080935149a/-/preview/"></p>
 
 <p>도시에는 N개의 빌딩이 있다.</p>
 
