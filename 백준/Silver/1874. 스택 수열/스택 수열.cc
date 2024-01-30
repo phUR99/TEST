@@ -1,63 +1,31 @@
-#include <iostream>
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <stack>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
 
-bool pushed[100001] = {false};
-
-int main(void) {
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	int n, temp;
 	stack<int> s;
-	vector<char> v;
-	int sum = 0;
-	bool ans = true;
+	int cnt = 1;
+	int n;
 	cin >> n;
-
-	for (int i = 1; i <= n; i++)
+	string ans = "";
+	while (n--)
 	{
-		cin >> temp;
-		if (pushed[temp]==false){
-			for (int j = 1; j <= temp; j++)
-			{
-				if (pushed[j] == true) continue;
-				else {
-					pushed[j] = true;
-					s.push(j);
-					
-					v.push_back('+');
-				}
-			}
-			sum++;
-			s.pop();
-			v.push_back('-');
-		}
-		else 
+		int tmp;
+		cin >> tmp;
+		while (cnt <= tmp)
 		{
-			while (!s.empty()) {
-				if (s.top() == temp) {
-					sum++;
-					s.pop();
-					v.push_back('-');
-					break;
-				}
-				s.pop();
-				v.push_back('-');
-			}
+			s.push(cnt++);
+			ans += "+\n";
 		}
-		
-	}
-	
-	if (sum != n) cout << "NO";
-	else {
-		for (auto i : v)
+		if (s.top() != tmp)
 		{
-			cout << i << '\n';
+			cout << "NO";
+			return 0;
 		}
+		s.pop();
+		ans += "-\n";
 	}
+	cout << ans;
 }
