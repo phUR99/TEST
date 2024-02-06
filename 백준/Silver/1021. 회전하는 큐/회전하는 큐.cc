@@ -1,59 +1,30 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
-#include <deque>
-#include <vector>
-#include <stack>
-//1. 어디서 시작하는 것이 더 유리한가?
+#include <bits/stdc++.h>
 using namespace std;
-
-int main(void) {
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	deque<int> D, S;
-	int n, m, idx, cnt;
-	int ans = 0;
-	cin >> n >> m;
-	
-	for ( int i = 1; i <= n; i++)
+	deque<int> dq;
+	int n, k, ans = 0;
+	cin >> n;
+	for (int i = 1; i <= n; i++)
 	{
-		D.push_back(i);
+		dq.push_back(i);
 	}
-	for (int i = 1; i <= m; i++)
+	cin >> k;
+	while (k--)
 	{
-		int temp;
-		cin >> temp;
-		S.push_back(temp);
-	}
-	while (!S.empty())
-	{
-		cnt = 0;
-		for (int i = 0; i < D.size(); i++) {
-			if (D[i] == S.front()) idx = i;
-		}
-		if (idx > D.size() /2)
+		int t;
+		int cnt = 0;
+		cin >> t;
+		while (dq.front() != t)
 		{
-			while (S.front() != D.front()) {
-				D.push_front(D.back());
-				D.pop_back();
-				cnt++;
-			}
-			D.pop_front();
-			S.pop_front();
+			dq.push_back(dq.front());
+			dq.pop_front();
+			cnt++;
 		}
-		else 
-		{
-			while (S.front() != D.front())
-			{
-				D.push_back(D.front());
-				D.pop_front();
-				cnt++;
-			}
-			D.pop_front();
-			S.pop_front();
-		}
-		ans += cnt;
+		ans += min(cnt, (int)dq.size() - cnt);
+		dq.pop_front();
 	}
-	
 	cout << ans;
+
 }
