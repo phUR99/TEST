@@ -1,61 +1,48 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
-#include <stack>
-#include <vector>
-#include <queue>
-#define X first
-#define Y second
+#include <bits/stdc++.h>
 using namespace std;
+int dx[] = { 0, 1, 0, -1 };
+int dy[] = { 1, 0, -1, 0 };
+int board[505][505];
+bool vis[505][505];
 
-bool map[501][501];
-bool visited[501][501] = { false };
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
 
-int BFS(pair<int, int> coordinate, int n, int m) {
-	int cnt = 1;
-	queue<pair<int, int>> Q;
-	visited[coordinate.X][coordinate.Y] = 1;
-	Q.push(coordinate);
-	while (!Q.empty())
-	{
-		pair<int, int> current = Q.front(); Q.pop();
-		for (int dir = 0; dir < 4; dir++) {
-			int nx = dx[dir] + current.X;
-			int ny = dy[dir] + current.Y;
-			if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-			if (visited[nx][ny]==true || map[nx][ny] != 1) continue;
-			visited[nx][ny] = 1;
-			Q.push({ nx, ny });
-			cnt++;
-		}
-	}
-	return cnt;
-}
-
-int main(void) {
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	int n, m;
+	int n, m, num = 0, ans = 0;
 	cin >> n >> m;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++) {
-			int tmp;
-			cin >> tmp;
-			map[i][j] = tmp;
+			cin >> board[i][j];
 		}
 	}
-	int ans = 0, cnt = 0;
+	queue<pair<int, int>> q;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++) {
-			if (map[i][j] == 0 || visited[i][j] == true) continue;
-			int tmp = BFS({ i, j }, n, m);
-			if (tmp != 0) cnt++;
-			if(ans < tmp) ans = tmp;
+			if (vis[i][j] == false && board[i][j] == 1) {
+				num++;
+				q.push({ i, j });
+				vis[i][j] = true;
+				int area = 0;
+				while (!q.empty())
+				{
+					pair<int, int> cur = q.front(); q.pop();
+					area++;
+					for (int dir = 0; dir < 4; dir++)
+					{
+						int nx = cur.first + dx[dir];
+						int ny = cur.second + dy[dir];
+						if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+						if (vis[nx][ny] == true || board[nx][ny] == 0) continue;
+						vis[nx][ny] = true;
+						q.push({ nx, ny });
+					}
+				}
+				ans = max(ans, area);
+			}
 		}
 	}
-	cout << cnt << '\n' << ans;
+	cout << num << '\n' << ans;
 }
