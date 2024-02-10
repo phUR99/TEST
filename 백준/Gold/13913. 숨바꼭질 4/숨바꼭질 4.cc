@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// 이전 위치의 정보를  저장하는 nxt 배열
+// 고려해야 할 점:시작 위치가 0이라면? 시작 위치와 도착 위치가 동일하다면?
 int dist[100005];
 int nxt[100005];
 int main() {
