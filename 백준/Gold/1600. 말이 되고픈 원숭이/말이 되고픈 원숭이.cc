@@ -1,3 +1,5 @@
+//k를 차원으로 보고 해결
+
 #include <bits/stdc++.h>
 using namespace std;
 int dx[] = { 0, 1, 0, -1, -1, -2, -1, -2, 1, 2, 1, 2 };
