@@ -33,8 +33,10 @@ int main() {
 		{
 			int nx = cx + dx[dir];
 			int ny = cy + dy[dir];
+			//nk를 받기 전에 범위 검사를 하지 않으면 인덱스 초과 오류가 뜰 수 있다. 먼제 체크
 			if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
 			int nk = (board[nx][ny] == '1') ? ck + 1 : ck;
+			//string으로 board를 받는 것에 유의
 			if (nk > k || dist[nx][ny][nk] != -1) continue;
 			q.push({ nx, ny, nk });
 			dist[nx][ny][nk] = dist[cx][cy][ck] + 1;
