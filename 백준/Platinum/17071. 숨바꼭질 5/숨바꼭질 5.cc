@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// 모든 방문했던 자리는 2초 후에 재방문 가능하다.
+// 짝수 시간일 때 방문 가능한 배열과 홀수 시간일 때 방문 가능한 배열을 나누어서 방문
 const int LMT = 500'000;
-int board[LMT + 2];
+
 int vis[2][LMT + 2];
 int main(void) {
   ios::sync_with_stdio(0);
