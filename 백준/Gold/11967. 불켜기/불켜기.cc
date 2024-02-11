@@ -6,7 +6,7 @@ bool vis[105][105];
 int dx[] = { -1, 0, 1, 0 };
 int dy[] = { 0, -1, 0, 1 };
 int n, m;
-
+// 들어갈 수 있는지 체크하는 함수 conn
 bool conn(pair<int, int> nxt) { 
     for (int dir = 0; dir < 4; dir++) {
         int nx = nxt.first + dx[dir];
@@ -35,6 +35,7 @@ int main() {
     while (!q.empty())
     {
         auto cur = q.front(); q.pop();
+        // 방 진입에서 스위치를 켠다
         for (auto e : sw[cur.first][cur.second])
         {
             if (vis[e.first][e.second] == true) continue;
@@ -44,6 +45,7 @@ int main() {
             }
             canVis[e.first][e.second] = true;
         }
+        // 이후 탐색하면서 방문 처리 
         for (int dir = 0; dir < 4; dir++)
         {
             int nx = cur.first + dx[dir];
