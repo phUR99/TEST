@@ -10,6 +10,7 @@ int ans = 0;
 
 void func(int idx, int t) {
 	//1. 체크인
+	//예외 처리 때문에 많이 헤맸다. 예외 처리를 어떻게 할 것인 지에 대해서 생각해볼 것
 	if (isused[idx] != 2)
 	{
 		isused[idx] = 1;
