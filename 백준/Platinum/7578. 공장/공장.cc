@@ -9,12 +9,10 @@ using namespace std;
 	업데이트의 구현 : 타겟 노드에 대해서 +1
 */
 
-long long tree[2000005];
+int tree[2000005];
 int s = 1;
 int n;
-int arr[500005], o[500005];
-vector<pair<int, int>> v1, v2;
-map<int, pair<int, int>> info;
+int arr[500005], num[1000001];
 
 long long query(int left, int right, int node, int qleft, int qright) {
 	//1. 타겟을 벗어났을 때
@@ -54,29 +52,22 @@ int main() {
 	}
 	for (int i = 0; i < n; i++)
 	{
-		int tmp;
-		cin >> tmp;
-		info[tmp].first = i + 1;
+		cin >> arr[i];
 	}
 	for (int i = 0; i < n; i++)
 	{
 		int tmp;
 		cin >> tmp;
-		info[tmp].second = i + 1;
+		num[tmp] = i;
 	}
-	vector<pair<int, int>> v;
-	for (auto it : info)
-	{
-		v.push_back({ it.second.first, it.second.second });
-	}
-	sort(v.begin(), v.end());
+
 	long long ans = 0;
 
-	for (auto e : v)
+	for (int i =0; i <n; i++)
 	{
 		
-		ans += query(1, s, 1, e.second, s);
-		update(1, s, 1, e.second);
+		ans += query(1, s, 1, num[arr[i]]+1, s);
+		update(1, s, 1, num[arr[i]] + 1);
 	}
 	cout << ans;
 	return 0;
