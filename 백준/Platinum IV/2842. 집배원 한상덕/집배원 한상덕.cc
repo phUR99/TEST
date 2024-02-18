@@ -3,6 +3,7 @@ using namespace std;
 
 /*
 //1. 시간초과 : 가지치기 필요할듯
+//2. bfs + 투 포인터 : 투 포인터를 어떻게저거용할 지에 대한 고민
 
 */
 string board[55];
