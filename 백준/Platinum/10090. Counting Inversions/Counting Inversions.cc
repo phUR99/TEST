@@ -50,7 +50,7 @@ int main() {
 	while (n--)
 	{
 		cin >> tmp;
-		ans += query(1, s, 1, tmp + 1, s);
+		ans += query(1, s, 1, tmp, s);
 		update(1, s, 1, tmp);
 	}
 	
