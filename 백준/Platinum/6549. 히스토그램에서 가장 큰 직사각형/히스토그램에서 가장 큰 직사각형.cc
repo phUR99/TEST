@@ -32,7 +32,6 @@ int main() {
 		//이후 스택을 거꾸로 탐색하면서 최댓값 찾기
 		while (!s.empty())
 		{
-			//탐색하지 못한 1 1 1 1 1 1 1을 탐색할 수 있음
 			ans = max(ans, (n - s.top().second) * s.top().first);
 			s.pop();
 
