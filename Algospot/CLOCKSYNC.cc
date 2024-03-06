@@ -2,7 +2,9 @@
 using namespace std;
 /*
 #CLOCKSYNC
-
+1. 초기 입력의 어려움
+2. 문제 조건 잘 읽기
+3. 스택 오버플로우 조심하
 
 */
 int t;
