@@ -3,7 +3,8 @@ using namespace std;
 /*
 #14500
 1. 순서 강제 + 가능한 모양 한정 -> 예외처리 필요한 모양 필요 ?
-틀린 이유 : dfs로 해결되지 않은 모양 더 있음 -> 에외처리
+틀린 이유 : dfs로 해결되지 않은 모양 더 있음 -> 에외처리 ㅜ ㅓ ㅏ ㅗ는 dfs로 해결할 수 없다
+2. 최악의 경우 4^4 * 25000 = 25000000 이하 -> 비효율적인 dfs처리 가능할듯
 3 3
 1 1 0
 1 0 0
@@ -20,26 +21,16 @@ bool visited[505][505];
 int dx[] = { 0, 1 ,0, -1};
 int dy[] = { 1, 0, -1, 0};
 
-int exceptShape[10][4][2]{
-	{{0, 0}, {0, 1}, {0, 2}, {-1, 2}},
-	{{0, 0}, {1, 0}, {2, 0}, {2, -1}},
-
-	{{0, 0}, {1, 0}, {1, -1}, {2, -1}},
-	{{0, 0}, {0, 1}, {-1, 1}, {-1, 2}},
-
-	{{0, 0}, {1, 0}, {1, -1}, {2, 0}},
-	{{0, 0}, {0, 1}, {-1, 1}, {0, 2}},
-	// ㄱ ㄴ
-	{ {0, 0}, {1, 0}, {0, 1}, {0, 2}},
-	{ {0, 0}, {0, 1}, {1, 0}, {2, 0}},
-	// ㅜ ㅏ
-	{ {0, 0}, {0, 1}, {1, 1}, {0, 2}},
-	{ {0, 0}, {1, 0}, {1, 1}, {2, 0}}
+int exceptShape[4][4][2]{
+	{ {0, 0}, {1, 0}, {1, -1}, {2, 0} },
+	{ {0, 0}, {0, 1}, {-1, 1}, {0, 2} },
+	{ {0, 0}, {0, 1}, {1, 1}, {0, 2}  },
+	{ {0, 0}, {1, 0}, {1, 1}, {2, 0}  }
 };
 
 int findExceptSum(int x, int y) {
 	int ret = 0;
-	for (int shape = 0; shape < 10; shape++)
+	for (int shape = 0; shape < 4; shape++)
 	{
 		int cur = 0;
 		for (int nxt = 0; nxt < 4; nxt++)
@@ -57,10 +48,10 @@ int findExceptSum(int x, int y) {
 	return ret;
 }
 
-int findMaxSum(int sx, int sy, int x, int y, int cnt) {
+int findMaxSum(int x, int y, int cnt) {
 	if (cnt == 4) return 0;
 
-	if (x < 0 || x >= n || y < 0 || y >= m || x < sx || y < sy) return 0;
+	if (x < 0 || x >= n || y < 0 || y >= m) return 0;
 
 	if (visited[x][y] == true) return 0;
 	visited[x][y] = true;
@@ -70,7 +61,7 @@ int findMaxSum(int sx, int sy, int x, int y, int cnt) {
 	{
 		int nx = x + dx[dir];
 		int ny = y + dy[dir];
-		ret = max(ret, findMaxSum(sx, sy, nx, ny, cnt + 1) + board[x][y]);
+		ret = max(ret, findMaxSum(nx, ny, cnt + 1) + board[x][y]);
 	}
 	visited[x][y] = false;
 	return ret;
@@ -93,7 +84,7 @@ int main() {
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++) {
-			ans = max(ans, findMaxSum(i, j, i, j, 0));
+			ans = max(ans, findMaxSum(i, j, 0));
 		}
 	}
 	for (int i = 0; i < n; i++)
