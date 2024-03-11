@@ -8,7 +8,9 @@ const int MX = 987654321;
 int arr[5];
 int n;
 int board[25][25];
+//회전 방향의 결정에 따른 보드의 모양의 변형을 담아줄 배열 
 int curBoard[25][25][5];
+//문제 조건에서 한번 합쳐진 블록은 같은 횟수 내에서는 다시 합쳐지지 않으므로, 합쳐질 때마다 표시를 해줄 배열
 bool isBeforeSum[25][25][5];
 int ans = 0;
 int dx[] = {1, 0, -1, 0};
@@ -16,29 +18,34 @@ int dy[] = {0, 1, 0, -1};
 
 
 void moveElement(int x, int y, int dir, int cur, int curValue) {
+	//범위 밖으로 나갔을 때,  이전 값을 불러와서 저장해준다
 	if (x < 0 || x >= n || y < 0 || y >= n) {
 		x -= dx[dir];
 		y -= dy[dir];
 		curBoard[x][y][cur] = curValue;
 		return;
 	}
+	//현재 값이 같고, 이전에 합친 적이 없을 경우
 	if (curBoard[x][y][cur] == curValue && isBeforeSum[x][y][cur] == false) {
 		isBeforeSum[x][y][cur] = true;
 		curBoard[x][y][cur] *= 2;
 		return;
 	}
+	//현재 값이랑 다를 경우
 	if (curBoard[x][y][cur] != 0 ) {
 		x -= dx[dir];
 		y -= dy[dir];
 		curBoard[x][y][cur] = curValue;
 		return;
 	}
+	//계속 시도
 	moveElement(x + dx[dir], y + dy[dir], dir, cur, curValue);
 }
 
 
 void play(int cur) {
 	int dir = arr[cur];
+	//방향에 따라 보드의 움직이는 방향이 달라진다.
 	if (dir == 0) {
 		for (int y = 0; y < n; y++)
 		{
@@ -84,7 +91,7 @@ void play(int cur) {
 	return;
 }
 
-
+//방향을 정하는 부분
 void moveBoard(int cur) {
 	if (cur == 5) {
 		for (int i = 0; i < n; i++)
