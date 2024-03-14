@@ -1,25 +1,22 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <algorithm>
-#include <vector>
-#include <stack>
-#include <queue>
-#include <math.h>
-#include <tuple>
+#include <bits/stdc++.h>
 using namespace std;
 
-int ans[1001];
-int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	int n; cin >> n;
-	ans[1] = 1; ans[2] = 2;
+int n;
+int cache[1005];
 
-	for (int i = 3; i <= n; i++)
-	{
-		ans[i] = (ans[i - 1] + ans[i - 2]) % 10007;
-	}
-	cout << ans[n];
 
+int tiling(int cur){
+    if(cur <= 1) return 1;
+
+    int &ret = cache[cur];
+    if(ret != -1 ) return ret;
+
+    return ret = (tiling(cur-1) + tiling(cur-2)) %10007;
+}
+
+int main(){
+    cin >> n;
+    memset(cache, -1, sizeof(cache));
+    cout << tiling(n);
+    return 0;
 }
