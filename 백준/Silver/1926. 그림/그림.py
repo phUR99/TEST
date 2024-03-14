@@ -1,6 +1,8 @@
+#1. import queue로 library 사용 가능
 import queue
-
+#2. n, m 받기 가능
 n, m = map(int, input().split())   
+#3. 2차원 배열같은 경우 현재 형식으로 받기 가능
 board = [list(map(int, input().split())) for _ in range(n)]
 visit = [[False for j in range(m)] for _ in range(n)]
 dx = [-1, 0, 1, 0]
