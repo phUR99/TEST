@@ -4,9 +4,7 @@ isUsed = [False for i in range(n+1)]
 def comb(cnt):
     
     if(cnt == m):
-        for i in range(m):
-            print(arr[i], end=" ")
-        print()
+        print(' '.join(map(str, arr)))
         return
 
     for i in range(1, n+1):
