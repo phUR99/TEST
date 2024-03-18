@@ -11,10 +11,12 @@ int ans = MX;
 
 bool exam(int st, int cur, int cnt){
     bool ret = false;
-    if(cnt == h+1){
-        if (cur == st) return true;
-        else return false;
+    if(cnt == h+1 && cur == st){
+        return true;        
     }
+    if(abs(cur-st) > h+1-cnt){
+        return false;
+    }        
     if (ladderInfo[cnt][cur] == 0 ){
         ret = ret || exam(st, cur, cnt+1);
     }
