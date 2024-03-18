@@ -1,49 +1,51 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <algorithm>
-#include <vector>
-#include <stack>
-#include <queue>
-#include <math.h>
-#include <tuple>
-#include <numeric>
-
+#include <bits/stdc++.h>
 using namespace std;
-#define ll long long
 
-
-int n;
-int a[4005], b[4005], c[4005], d[4005];
+// 4중 for문 -> o(4000^4) x
+// a+b 와 c+d를 비교하기 2*n^2 * 2logn _> n^2logN
+int a[4004], b[4004], c[4004], d[4004];
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i] >> b[i] >> c[i] >> d[i];
-    }
-    vector<int> ab, cd;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++) {
-            ab.push_back(a[i] + b[j]);
-            cd.push_back(c[i] + d[j]);
-        }
-    }
-    sort(ab.begin(), ab.end());
-    sort(cd.begin(), cd.end());
-    // 0000..일 경우 답의 개수가 엄청나게 늘어날 수 있다. ll으로 선언해야 하는 이유
-    ll ans = 0;
-    for (auto i : ab)
-    {
-        if (binary_search(cd.begin(), cd.end(), -i)) {
-            auto idx_l = lower_bound(cd.begin(), cd.end(), -i);
-            auto idx_u = upper_bound(cd.begin(), cd.end(), -i);
-            ans += idx_u - idx_l;
-        }
-    }
-    cout << ans;
-  
+    ios_base::sync_with_stdio(false);  cin.tie(NULL); cout.tie(NULL);
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i] >> b[i] >> c[i] >> d[i];
+	}
+	vector<int> ab, cd;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++) {
+			ab.push_back(a[i] + b[j]);
+			cd.push_back(c[i] + d[j]);
+		}
+	}
+	long long p1 = 0, p2 = 0;
+	sort(ab.begin(), ab.end());
+	sort(cd.begin(), cd.end(), greater<>());
+	long long ans = 0;
+	while (p1 < ab.size() && p2 <cd.size())
+	{
+		if (ab[p1] + cd[p2] < 0) {
+			p1++;
+		}
+		else if (ab[p1] + cd[p2] == 0) {
+			long long t1 = p1, t2 = p2;
+			while (p1 < ab.size() && ab[p1] == ab[t1])
+			{				
+				p1++;
+			}
+			while (p2 < cd.size() && cd[p2] == cd[t2])
+			{				
+				p2++;
+			}
+			ans += (p1 - t1) * (p2-t2);
+		}
+		else
+		{
+			p2++;
+		}
+	}
+	cout << ans;
 }
