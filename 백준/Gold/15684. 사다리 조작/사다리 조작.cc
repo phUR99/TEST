@@ -6,6 +6,8 @@ using namespace std;
 
 int n, m, h;
 int ladderInfo[50][50];
+const int MX = 987654321;
+int ans = MX;
 
 bool exam(int st, int cur, int cnt){
     bool ret = false;
@@ -36,24 +38,24 @@ bool examine(){
 }
 
 
-void makeladder(int cur, int cnt){
-    if(cnt == cur){
-        if(examine()){
-           cout << cur;
-           exit(0);
-        }        
+void makeladder(int xPos, int cur){
+    if(cur > 3){     
         return;
     }
-    for (int j = 1; j <= h; j++)
+    if (examine()){
+        ans = min(ans, cur);
+        return;
+    }
+    for (int j = xPos; j <= h; j++)
     {
         for (int i = 1; i < n; i++)
         {
             if(ladderInfo[j][i] == 0 && ladderInfo[j][i+1] == 0){
                 ladderInfo[j][i]=1; ladderInfo[j][i+1] =2;
-                makeladder(cur+1, cnt);
+                makeladder(j, cur+1);
                 ladderInfo[j][i]=0; ladderInfo[j][i+1] =0;
             }
-        }   ;
+        }
     }
     
     
@@ -69,11 +71,7 @@ int main(){
         cin >> num >> pos;
         ladderInfo[num][pos] =1; ladderInfo[num][pos+1] = 2;        
     }
-    for (int i = 0; i < 4; i++)
-    {        
-        makeladder(0, i);
-    }
-    cout << -1;
-    
+    makeladder(1, 0);
+    cout << (ans == MX ? -1 : ans);    
     return 0;
 }
