@@ -2,10 +2,10 @@
 `define __TEST_V__
 
 module cnt_one(rega, count);
-    input [3:0] rega;
-    output [2:0] count;
-    reg [3:0] temp_reg;
-    reg [2:0] count;
+    input [7:0] rega;
+    output [3:0] count;
+    reg [7:0] temp_reg;
+    reg [3:0] count;
     
     always @(rega) begin
         count    = 0;
