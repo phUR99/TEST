@@ -15,7 +15,7 @@ module encoder (i, e);
             8'bxxx10000: e = 3'b100;
             8'bxx100000: e = 3'b101;
             8'bx1000000: e = 3'b110;
-            8'b01000000: e = 3'b111;
+            8'b10000000: e = 3'b111;
             default: e = 3'bxxx;
         endcase
     end
