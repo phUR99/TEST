@@ -34,9 +34,6 @@ for _ in range(num_steps):
     new_x = x[-1] + np.random.randint(-5, 5)  # x 좌표
     new_y = y[-1] + np.random.randint(-5, 5)  # y 좌표
     new_z = z[-1] + np.random.randint(-5, 5)  # z 좌표    
-    new_x = np.random.randint(-100, 100)  # x 좌표
-    new_y = np.random.randint(-100, 100)  # y 좌표
-    new_z = np.random.randint(-100, 100)  # z 좌표
 
 
     # 좌표를 리스트에 추가
