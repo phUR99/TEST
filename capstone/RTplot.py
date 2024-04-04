@@ -30,10 +30,15 @@ num_steps = 10000  # 총 시뮬레이션 단계
 
 for _ in range(num_steps):
     # 가우시안 분포에서 좌표 생성
+    
     new_x = x[-1] + np.random.randint(-5, 5)  # x 좌표
     new_y = y[-1] + np.random.randint(-5, 5)  # y 좌표
-    new_z = z[-1] + np.random.randint(-5, 5)  # z 좌표
-    
+    new_z = z[-1] + np.random.randint(-5, 5)  # z 좌표    
+    new_x = np.random.randint(-100, 100)  # x 좌표
+    new_y = np.random.randint(-100, 100)  # y 좌표
+    new_z = np.random.randint(-100, 100)  # z 좌표
+
+
     # 좌표를 리스트에 추가
     x.append(new_x)
     y.append(new_y)
@@ -41,4 +46,3 @@ for _ in range(num_steps):
     
     # 시각화
     plot(x, y, z)
-    
