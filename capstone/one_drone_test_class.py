@@ -37,19 +37,19 @@ position = [4,4]
 
 def plot(data_queue):    
     fig = plt.figure()
-    ax = fig.add_subplot(121, projection='3d')
-    ax2 = fig.add_subplot(122, projection='3d')
+    ax = fig.add_subplot(111, projection='3d')
+    #ax2 = fig.add_subplot(122, projection='3d')
     drone_trajectory = []
     def update_plot(frame):
         ax.clear()
-        ax2.clear()
-        # 데이터 큐에서 샘플을 받아와 시각화
+        #ax2.clear()
         try:
             sample = data_queue.get_nowait()
         except queue.Empty:
             pass
         else:
-            drone_trajectory.append(sample)            
+            drone_trajectory.append(sample)
+
         x_values = [pos[0] for pos in drone_trajectory]
         y_values = [pos[1] for pos in drone_trajectory]
         z_values = [0] 
@@ -57,23 +57,17 @@ def plot(data_queue):
         y = y_values[-1]
         z = z_values[-1]   
         ax.plot(x_values, y_values, z_values, color='b')
-        ax2.scatter(x,y,z, marker ='x')  
+        ax.plot(x,y,z, marker ='x', markersize = 10)  
 
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_xlim(-10, 10)  # x 축의 범위 설정
-        ax.set_ylim(-10, 10)  # y 축의 범위 설정
-        ax.set_zlim(-10, 10)
-        ax.set_title('Real_Time 3D Vis. of  trajectory')
+        ax.set_title('RT 3D Vis. of  trajectory')
 
-        ax2.set_xlabel('X')
-        ax2.set_ylabel('Y')
-        ax2.set_zlabel('Z')
-        ax2.set_xlim(-10, 10)  # x 축의 범위 설정
-        ax2.set_ylim(-10, 10)  # y 축의 범위 설정
-        ax2.set_zlim(-10, 10)
-        ax2.set_title('Real-time 3D Vis. of pos')
+        #ax2.set_xlabel('X')
+        #ax2.set_ylabel('Y')
+        #ax2.set_zlabel('Z')
+        #ax2.set_title('RT 3D Vis. of pos')
 
     ani = FuncAnimation(fig, update_plot, interval=200, cache_frame_data=False)
     plt.show()
