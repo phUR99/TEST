@@ -22,7 +22,8 @@ module shift_reg (clk, rst, sin, sout);
             q[4] <= q[3];
             q[5] <= q[4];
             q[6] <= q[5];
-            q[7] <= q[6];            
+            q[7] <= q[6]; 
+            // q <= {q[6:0], sin};           
         end    
     end
     
