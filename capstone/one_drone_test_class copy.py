@@ -26,10 +26,10 @@ a=[]
 flytime = 20
 height = 0.3
 position = np.array([
-    [0, 0],
-    [7.14, 3.38],      
-    [10.25, 1.94],            
-    [0.8, 3.76],
+    [0.6, 1.8],
+    [0, 0],      
+    [0, 3.0],            
+    [1.8, 0],
     [0 ,0],
     [0, 0]            
 ])
@@ -48,7 +48,7 @@ def plot():
             pass
         else :
             sample = data_queue.get()
-            sample = list(sample.T)                       
+            #sample = list(sample.T)                       
             drone_trajectory.append(sample)            
             x_values = [pos[0] for pos in drone_trajectory]
             y_values = [pos[1] for pos in drone_trajectory]
@@ -56,7 +56,7 @@ def plot():
             x = x_values[-1]
             y = y_values[-1]
             z = z_values[-1]   
-            ax.plot(x_values, y_values, z_values, color='b')
+            #ax.plot(x_values, y_values, z_values, color='b')
             ax.plot(x_values[-1], y_values[-1], z_values[-1], marker = 'x', markersize = 10)             
             ax.set_xlabel('X')
             ax.set_ylabel('Y')
@@ -173,24 +173,44 @@ def sequence(cf, height, t):
     global data_queue
     end_time = time.time() + flytime
     def TDOA(R):
-        R = np.array(R)
-        R = np.square(R)        
-        R = R[1:3]                
-        K = np.sum(np.square(position[1:3, :]), axis=1)                
-        H = position[1:3, :]
-        pH = np.linalg.pinv(H)
-        b = (K -R) /2
-        xhat = pH @ b        
-        return xhat
+        #R = np.array(R)
+        #R = np.square(R)        
+        #R = R[1:3]                
+        #K = np.sum(np.square(position[1:3, :]), axis=1)                
+        #H = position[1:3, :]
+        #pH = np.linalg.pinv(H)
+        #b = (K -R) /2
+        #xhat = pH @ b        
+        #return xhat
+        x1,y1=0,0
+        x2,y2=0.6,3.0
+        x3,y3=1.8,0
+
+        r1=R[1]
+        r2=R[2]
+        r3=R[3]
+
+        H=np.array([[x2,y2],[x3,y3]])
+
+        K2=x2**2+y2**2
+        K3=x3**2+y3**2
+
+        b=1/2*np.array([[(K2-r2**2+r1**2)],[(K3-r3**2+r1**2)]])
+
+        sudo_inv=np.linalg.inv(H.T@H)
+        find_x=sudo_inv@H.T@b
+
+        return find_x
     
     print("sequence start...")    
-
     take_off(cf, height, t)
     while time.time() < end_time:  
         cf.commander.send_hover_setpoint(0, 0, 0, height)
         d = [data.d0, data.d1, data.d2, data.d3, data.d4, data.d5]        
         r = TDOA(d)
+        print('-----------------------------')
         print(r)
+        print(d)
         data_queue.put(r)
         time.sleep(0.1)
     land(cf, height, t)
