@@ -54,6 +54,7 @@ int main(){
             for (int j = 10; j >= 0; j--)
             {
                 int tmp = j;
+                // 내리는 방법 1 : 가장 큰 높이부터 계속해서 swap하면서 갱신하기
                 while (tmp < 11 && board[tmp +1][i] == '.')
                 {
                     swap(board[tmp][i], board[tmp+1][i]);
