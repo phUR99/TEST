@@ -17,7 +17,7 @@ initial begin
     #10 WriteEn = 1;
     for (i = 1; i < 8; i = i +1) begin
         if (i ==7)  begin
-        # 10 WriteData = 0;
+        #10 WriteData = 0;
             WriteReg = i; 
         end
         else begin
@@ -25,5 +25,6 @@ initial begin
             WriteReg = i;
         end
     end
+    #100 $finish;
 end
 endmodule

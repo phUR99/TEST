@@ -1,281 +1,326 @@
-#include <iostream>
-#include <vector>
-#include <queue>
- 
-#define endl "\n"
-#define MAX 25
-using namespace std;
- 
-int r, c, k, w;
-int map[MAX][MAX];
-bool wallMap[MAX][MAX][4];
- 
-vector<pair<int, int>> searchPos;
-vector<pair<pair<int, int>, int>> heater;
-vector<pair<pair<int, int>, int>> wall;
- 
-int dx[] = { 0, 0, 1, -1 };
-int dy[] = { 1, -1, 0, 0 };
- 
-int wdx[4][3] = { { -1, 0, 1 }, {-1, 0, 1 }, {1, 1, 1}, {-1, -1, -1} };
-int wdy[4][3] = { { 1, 1, 1}, { -1, -1, -1 }, {-1, 0, 1 },{-1, 0, 1} };
- 
-void printMap(int A[][MAX]) {
-    for (int i = 1; i <= r; i++) {
-        for (int j = 1; j <= c; j++) {
-            printf("%2d ", A[i][j]);
-        }
-        cout << endl;
-    }
-    cout << "#######################################################" << endl;
+using namespace std;
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+
+int R,C,K,W; // R 세로 C 가로
+
+// x, y, t로 이루어져 있다.
+
+// t가 0인 경우 (x, y)와 (x-1, y) 사이에 벽이 있는 것이고, 세로 - 왼쪽 기준
+// 1인 경우에는 (x, y)와 (x, y+1) 사이에 벽이 있는 것이다. 가로 - 아래쪽 기준
+
+int arr[25][25];
+int tmp[25][25];
+bool sero[25][25];
+bool garo[25][25];
+bool isvisited[25][25];
+
+bool isInside(int y, int x){
+    return !(y > R || y < 1 || x > C || x < 1);
 }
- 
-void input() {
-    cin >> r >> c >> k;
-    for (int i = 1; i <= r; i++) {
-        for (int j = 1; j <= c; j++) {
-            cin >> map[i][j];
-            if (map[i][j] != 0 && map[i][j] != 5) {
-                heater.push_back(make_pair(make_pair(i, j), map[i][j]));
-            }
-            else if (map[i][j] == 5) {
-                searchPos.push_back(make_pair(i, j));
-            }
-            map[i][j] = 0;
-        }
-    }
-    cin >> w;
-    for (int i = 0; i < w; i++) {
-        int a, b, c; cin >> a >> b >> c;
-        wall.push_back(make_pair(make_pair(a, b), c));
-    }
+
+class air{
+public :
+    int y; int x; int d;
+    air(int y, int x, int d) : y(y), x(x), d(d) {};
+};
+
+vector<air> airs;
+vector<pair<int, int>> check;
+
+
+//1: 방향이 오른쪽인 온풍기가 있음
+//2: 방향이 왼쪽인 온풍기가 있음
+//3: 방향이 위인 온풍기가 있음
+//4: 방향이 아래인 온풍기가 있음
+
+void right(int y, int x, int s){
+    if(!isInside(y, x) || isvisited[y][x]) return ;
+    isvisited[y][x]=true;
+    // 벽 있는지 확인해야함
+    arr[y][x] += s;
+
+    if(s==1) return;
+
+    // 대각선 위 (y-1, x+1)
+    if(isInside(y-1, x+1)){
+        if(!garo[y-1][x] && !sero[y-1][x+1]) right(y-1, x+1, s-1);
+    }
+
+    // 오른쪽 (y, x+1) 오른쪽 벽만 확인 (horizon : 왼 기준)
+    if(isInside(y, x+1)){
+        if(!sero[y][x+1]) right(y, x+1, s-1);
+    }
+
+    // 대각선 아래 (y+1, x+1)
+    if(isInside(y+1, x+1)){
+        if(!garo[y][x] && !sero[y+1][x+1]) right(y+1, x+1, s-1);
+    }
 }
- 
-void settingWall() {
-    for (int i = 0; i < w; i++) {
-        int x = wall[i].first.first;
-        int y = wall[i].first.second;
-        int t = wall[i].second;
-        
-        if (t == 0) {
-            wallMap[x][y][3] = true;
-            wallMap[x - 1][y][2] = true;
-        }
-        else {
-            wallMap[x][y][0] = true;
-            wallMap[x][y + 1][1] = true;
-        }
-    }
+
+void left(int y, int x, int s){
+    if(!isInside(y, x) || isvisited[y][x]) return ;
+    isvisited[y][x]=true;
+    // 벽 있는지 확인해야함
+    arr[y][x] += s;
+
+    if(s==1) return;
+
+    // 대각선 위 (y-1, x-1)
+    if(isInside(y-1, x+1)){
+        if(!garo[y-1][x] && !sero[y-1][x]) left(y-1, x-1, s-1);
+    }
+
+    // 왼쪽 (y, x-11) 오른쪽 벽만 확인 (horizon : 왼 기준)
+    if(!sero[y][x]) left(y, x-1, s-1);
+
+
+    // 대각선 아래 (y+1, x-1)
+    if(isInside(y+1, x+1)){
+        if(!garo[y][x] && !sero[y+1][x]) left(y+1, x-1, s-1);
+    }
+
+
 }
- 
-bool check() {
-    for (int i = 0; i < searchPos.size(); i++) {
-        int x = searchPos[i].first;
-        int y = searchPos[i].second;
-        if (map[x][y] < k) return false;
-    }
-    return true;
+
+void down(int y, int x, int s){
+    if(!isInside(y, x) || isvisited[y][x]) return ;
+    isvisited[y][x]=true;
+    // 벽 있는지 확인해야함
+    arr[y][x] += s;
+
+    if(s==1) return;
+
+    // 대각선 왼쪽 (y+1, x-1)
+    if(isInside(y+1, x-1)){
+        if(!garo[y][x-1] && !sero[y][x]) down(y+1, x-1, s-1);
+    }
+
+    // 아래 (y+1, x) 오른쪽 벽만 확인 (horizon : 왼 기준)
+    if(isInside(y+1, x)){
+        if(!garo[y][x]) down(y+1, x, s-1);
+    }
+
+    // 대각선 오른쪽 (y+1, x+1)
+    if(isInside(y+1, x+1)){
+        if(!garo[y][x+1] && !sero[y][x+1]) down(y+1, x+1, s-1);
+    }
 }
- 
-int changeMydir(int d) {
-    switch (d) {
-    case 1:
-        return 0;
-    case 2:
-        return 1;
-    case 3:
-        return 3;
-    case 4:
-        return 2;
-    }
-}
- 
-void copyMap(int A[][MAX], int B[][MAX]) {
-    for (int i = 1; i <= r; i++) {
-        for (int j = 1; j <= c; j++) {
-            A[i][j] = B[i][j];
-        }
-    }
-}
- 
-bool checkWall(int x, int y, int nx, int ny, int d, int dir) {
-    if (dir == 1) {
-        if (wallMap[x][y][d] == false) return true;
-    }
-    else if(dir == 0){
-        if (d == 0) {
-            int upx = x - 1;
-            int upy = y;
-            if (wallMap[x][y][3] == false && wallMap[upx][upy][0] == false) return true;
-        }
-        else if (d == 1) {
-            int upx = x - 1;
-            int upy = y;
-            if (wallMap[x][y][3] == false && wallMap[upx][upy][1] == false) return true;
-        }
-        else if (d == 2) {
-            int dnx = x;
-            int dny = y - 1;
-            if (wallMap[x][y][1] == false && wallMap[dnx][dny][2] == false) return true;
-        }
-        else if (d == 3) {
-            int dnx = x;
-            int dny = y - 1;
-            if (wallMap[x][y][1] == false && wallMap[dnx][dny][3] == false) return true;
-        }
-    }
-    else if (dir == 2) {
-        if (d == 0) {
-            int upx = x + 1;
-            int upy = y;
-            if (wallMap[x][y][2] == false && wallMap[upx][upy][0] == false) return true;
-        }
-        else if (d == 1) {
-            int upx = x + 1;
-            int upy = y;
-            if (wallMap[x][y][2] == false && wallMap[upx][upy][1] == false) return true;
-        }
-        else if (d == 2) {
-            int dnx = x;
-            int dny = y + 1;
-            if (wallMap[x][y][0] == false && wallMap[dnx][dny][2] == false) return true;
-        }
-        else if (d == 3) {
-            int dnx = x;
-            int dny = y + 1;
-            if (wallMap[x][y][0] == false && wallMap[dnx][dny][3] == false) return true;
-        }
-    }
-    return false;
-}
- 
-void addMap(int A[][MAX], int B[][MAX]) {
-    for (int i = 1; i <= r; i++) {
-        for (int j = 1; j <= c; j++) {
-            A[i][j] += B[i][j];
-        }
-    }
-}
- 
-void spread(int x, int y, int d) {
-    bool update[MAX][MAX] = { false, };
-    d = changeMydir(d);
-    x += dx[d];
-    y += dy[d];
-    if (x < 1 || y < 1 || x > r || y > c) return;
- 
-    queue<pair<pair<int, int>, int >> q;
-    q.push(make_pair(make_pair(x, y), 5));
- 
-    while (q.empty() == 0) {
-        int x = q.front().first.first;
-        int y = q.front().first.second;
-        int wind = q.front().second;
-        q.pop();
- 
-        map[x][y] += wind;
-        if (wind == 1) continue;
- 
-        for (int i = 0; i < 3; i++) {
-            int nx = x + wdx[d][i];
-            int ny = y + wdy[d][i];
-            if (nx >= 1 && ny >= 1 && nx <= r && ny <= c) {
-                if (update[nx][ny] == false && checkWall(x, y, nx, ny, d, i) == true) {
-                    update[nx][ny] = true;
-                    q.push(make_pair(make_pair(nx, ny), wind - 1));
-                }
-            }
-        }
-    }
-}
- 
-void spreadWind() {
-    for (int i = 0; i < heater.size(); i++) {
-        int x = heater[i].first.first;
-        int y = heater[i].first.second;
-        int d = heater[i].second;
-        spread(x, y, d);
-    }
-}
- 
-void controlTemperature() {
-    int tempMap[MAX][MAX] = { 0, };
-    for (int x = 1; x <= r; x++) {
-        for (int y = 1; y <= c; y++) {
-            for (int i = 0; i < 2; i++) {
-                int dir = i == 0 ? 0 : 2;
-                int nx = x + dx[dir];
-                int ny = y + dy[dir];
-                if (nx >= 1 && ny >= 1 && nx <= r && ny <= c) {
-                    if (wallMap[x][y][dir] == false) {
-                        pair<int, int> maxCoord, minCoord;
-                        if (map[x][y] > map[nx][ny]) {
-                            maxCoord = { x, y };
-                            minCoord = { nx, ny };
-                        }
-                        else {
-                            maxCoord = { nx, ny };
-                            minCoord = { x, y };
-                        }
- 
-                        int diff = abs(map[x][y] - map[nx][ny]);
-                        diff /= 4;
-                        tempMap[maxCoord.first][maxCoord.second] -= diff;
-                        tempMap[minCoord.first][minCoord.second] += diff;
-                    }
-                }
-            }
-        }
-    }
-    addMap(map, tempMap);
-}
- 
-void decreaseTemperature() {
-    for (int i = 1; i <= c; i++) {
-        if (map[1][i] > 0) map[1][i]--;
-        if (map[r][i] > 0) map[r][i]--;
-    }
-    for (int i = 2; i < r; i++) {
-        if (map[i][1] > 0) map[i][1]--;
-        if (map[i][c] > 0) map[i][c]--;
-    }
- 
-}
- 
-void solution() {
-    settingWall();
-    int chocolate = 0;
-    while (1) {
-        if (chocolate > 100) {
-            break;
-        }
-        spreadWind();
-        controlTemperature();
-        decreaseTemperature();
-        chocolate++;
- 
-        if (check() == true) {
-            break;
-        }
-    }
-    cout << chocolate << endl;
-}
- 
-void solve() {
-    input();
-    solution();
-}
- 
-int main(void) {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
- 
-    //freopen("Input.txt", "r", stdin);
-    solve();
- 
-    return 0;
+
+void up(int y, int x, int s){
+    if(!isInside(y, x) || isvisited[y][x]) return ;
+    isvisited[y][x]=true;
+    // 벽 있는지 확인해야함
+    arr[y][x] += s;
+
+    if(s==1) return;
+
+
+
+    // 대각선 왼쪽 (y-1, x-1)
+    if(isInside(y-1, x-1)){
+        if(!garo[y-1][x-1] && !sero[y][x]) up(y-1, x-1, s-1);
+    }
+
+
+    // 위 (y-1, x)
+    if(isInside(y-1, x)){
+        if(!garo[y-1][x]) up(y-1, x, s-1);
+    }
+
+    // 대각선 오른쪽 (y-1, x+1)
+    if(isInside(y-1, x+1)){
+        if(!garo[y-1][x+1] && !sero[y][x+1]) up(y-1, x+1, s-1);
+    }
+
+
 }
 
 
-출처: https://yabmoons.tistory.com/718 [얍문's Coding World..:티스토리]
+
+void solve1(int y, int x, int d){
+    memset(isvisited, false, sizeof(isvisited));
+
+    if(d==1) right(y, x, 5);
+    else if(d==2) left(y, x, 5);
+    else if(d==3) up(y, x, 5);
+    else if(d==4) down(y, x, 5);
+    else cout<<"[go] RT error\n";
+
+}
+
+void solve2(){
+
+    for(int y=1; y<=R; y++){
+        for(int x=1; x<=C; x++){
+
+            int target = arr[y][x]/4;
+
+            // 1. 위
+            int ny = y-1; int nx=x;
+            if(isInside(ny, nx) && !garo[ny][nx]){
+                if(arr[y][x]>arr[ny][nx]){
+                    int dif = arr[y][x]-arr[ny][nx];
+                    dif/=4;
+                    tmp[y][x] -= dif;
+                    tmp[ny][nx] += dif;
+                }
+            }
+            // 2. 아래
+            ny = y+1;
+            nx = x;
+            if(isInside(ny, nx) && !garo[y][x]){
+                if(arr[y][x]>arr[ny][nx]){
+                    int dif = arr[y][x]-arr[ny][nx];
+                    dif/=4;
+                    tmp[y][x] -= dif;
+                    tmp[ny][nx] += dif;
+                }
+            }
+
+            // 3. 왼
+            ny = y;
+            nx = x-1;
+            if(isInside(ny, nx) && !sero[y][x]){
+                if(arr[y][x]>arr[ny][nx]){
+                    int dif = arr[y][x]-arr[ny][nx];
+                    dif/=4;
+                    tmp[y][x] -= dif;
+                    tmp[ny][nx] += dif;
+                }
+            }
+
+            // 4. 오
+            ny = y;
+            nx = x+1;
+            if(isInside(ny, nx) && !sero[y][x+1]){
+                if(arr[y][x]>arr[ny][nx]){
+                    int dif = arr[y][x]-arr[ny][nx];
+                    dif/=4;
+                    tmp[y][x] -= dif;
+                    tmp[ny][nx] += dif;
+                }
+            }
+
+        }
+    }
+
+}
+
+
+void solve3(){
+
+    for(int i=1; i<=C; i++){
+        if(arr[1][i]>0) arr[1][i]--;
+        if(arr[R][i]>0) arr[R][i]--;
+    }
+
+    for(int j=2; j<R; j++){
+        if(arr[j][1]>0) arr[j][1]--;
+        if(arr[j][C]>0) arr[j][C]--;
+    }
+
+}
+
+
+bool checkAir(){
+
+    for(auto c : check){
+        if(arr[c.first][c.second]<K) return false;
+    }
+
+    return true;
+}
+
+
+void copyArr(){
+    for(int i=1; i<=R; i++){
+        for(int j=1; j<=C; j++){
+            arr[i][j] += tmp[i][j];
+            tmp[i][j]=0;
+        }
+    }
+}
+
+void show(){
+    for(int i=1; i<=R; i++){
+        for(int j=1; j<=C; j++){
+            cout<<arr[i][j]<<" ";
+        }
+        cout<<'\n';
+    }
+}
+
+
+//온풍기가 있는 칸도 다른 온풍기에 의해 온도가 상승할 수 있다.
+int main(){
+
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>R>>C>>K;
+
+    for(int i=1; i<=R; i++){
+        for(int j=1; j<=C; j++){
+            cin>>arr[i][j];
+
+            if(arr[i][j]>=1 && arr[i][j]<=4){
+                airs.push_back(air(i,j,arr[i][j]));
+                arr[i][j]=0;
+            }
+            else if(arr[i][j]==5) {
+                arr[i][j]=0;
+                check.push_back({i,j});
+            };
+        }
+    }
+
+    cin>>W;
+    int x, y, t;
+    for(int i=0; i<W; i++){
+        cin>>y>>x>>t;
+        if(t==0) garo[y-1][x]=true;
+        else sero[y][x+1]=true;
+        }
+
+
+    int choco=0;
+    while(1){
+
+        //1 . 온풍기
+        for (auto a : airs){
+            int y = a.y;
+            int x = a.x;
+            int d = a.d;
+
+            if(d==1) solve1(y, x+1, d);
+            else if(d==2) solve1(y, x-1, d);
+            else if(d==3) solve1(y-1, x, d);
+            else if(d==4) solve1(y+1, x, d);
+        }
+
+        //2. 온도 조절
+        solve2();
+        copyArr();
+
+        //3. 온도가 1 이상인 가장 바깥쪽 칸의 온도가 1씩 감소
+        solve3();
+
+        //4. 초콜렛 하나 먹는다
+        choco++;
+
+     //   cout<<choco<<'\n';
+     //   show();
+     //   cout<<"========\n";
+
+        //5. 조사하는 모든 칸의 온도가 K 이상이 되었는지 검사.
+        if(checkAir()) break;
+        if(choco>100) break;
+    }
+
+    cout<<choco;
+
+}

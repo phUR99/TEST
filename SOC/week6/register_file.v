@@ -12,12 +12,10 @@ module register_file (
     input [2:0] WriteReg;
         
     reg [15:0] reg_file [0:7];
-    initial begin
-        $readmemh("mem.mem", reg_file);
-    end
+    //주소에 해당하는 값을 출력해준다.
     assign ReadDataEven = reg_file[2 * ReadRegEven];
     assign ReadDataOdd = reg_file[2 * ReadRegOdd + 1];
-
+    //주소에 해당하는 값을 register file에 작성한다.
     always @(posedge clk) begin
         if (WriteEn) reg_file[WriteReg] <= WriteData;
     end
