@@ -16,10 +16,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import queue
+from cflib.crazyflie.localization import Localization
 logging.basicConfig(level=logging.ERROR)
 
 # URI to the Crazyflie to connect to
-uri = 'radio://0/125/2M/E7E7E7E7A2'
+uri_target = 'radio://0/125/2M/E7E7E7E7A2'
+uri_anchor = 'radio://0/90/2M/E7E7E7E7CC'
+
 
 #sequence=[0,0,0]
 a=[]
@@ -65,16 +68,22 @@ def plot():
 
     ani = FuncAnimation(fig, update_plot, interval=100, cache_frame_data=False)
     plt.show()
+
 class TOC:
     def __init__(self, cf):
         self._cf = cf 
+        self.distance=[0]*7
+        
+        #로그 설정
         self.log_conf = LogConfig(name='Position', period_in_ms=200)
+        
         self.log_conf.add_variable('ranging.distance0', 'float')
         self.log_conf.add_variable('ranging.distance1', 'float')
         self.log_conf.add_variable('ranging.distance2', 'float')
         self.log_conf.add_variable('ranging.distance3', 'float')
         self.log_conf.add_variable('ranging.distance4', 'float')
         self.log_conf.add_variable('ranging.distance5', 'float')
+        self.log_conf.add_variable('tdoa3.hmDist', 'float')        
 
         self._cf.log.add_config(self.log_conf)
         self.log_conf.data_received_cb.add_callback(self.position_callback)
@@ -86,7 +95,7 @@ class TOC:
         self.d2=data['ranging.distance2']
         self.d3=data['ranging.distance3']
         self.d4=data['ranging.distance4']
-        self.d5=data['ranging.distance5']
+        self.d5=data['ranging.distance5']        
 
 def wait_for_position_estimator(scf):
     print('Waiting for estimator to find position...')
@@ -131,14 +140,13 @@ def wait_for_position_estimator(scf):
                 break
 
 
-def reset_estimator(scf):
+def reset_estimator(scf,drone_id):
     global data
     cf = scf.cf
     cf.param.set_value('kalman.resetEstimation', '1')
     time.sleep(0.1)
     cf.param.set_value('kalman.resetEstimation', '0')
-    data = TOC(cf)
-    
+    data = TOC(cf,drone_id)
     time.sleep(0.1)
     wait_for_position_estimator(cf)
 
@@ -169,7 +177,7 @@ def land(cf, position, lt):
     # since the message queue is not flushed before closing
     time.sleep(0.1)
 
-def sequence(cf, height, t):
+def sequence(cf, height, t, toc, drone_id):
     global data_queue
     end_time = time.time() + flytime
     def TDOA(R):
@@ -202,34 +210,47 @@ def sequence(cf, height, t):
 
         return find_x
     
-    print("sequence start...")    
-    take_off(cf, height, t)
-    while time.time() < end_time:  
-        cf.commander.send_hover_setpoint(0, 0, 0, height)
-        d = [data.d0, data.d1, data.d2, data.d3, data.d4, data.d5]        
-        r = TDOA(d)
-        print('-----------------------------')
-        print(r)
-        print(d)
-        data_queue.put(r)
-        time.sleep(0.1)
-    land(cf, height, t)
+    print("sequence start...")
+    if drone_id == 'drone1':
+        take_off(cf, height, t)
+        while time.time() < end_time:  
+            cf.commander.send_hover_setpoint(0, 0, 0, height)
+            toc.distance = [data.d0, data.d1, data.d2, data.d3, data.d4, data.d5, data.d6]        
+            #r = TDOA(d)
+            print('-----------------------------')
+            #data_queue.put(r)
+            time.sleep(0.1)
+            print(f"{drone_id} distances: {toc.distance}")
+        land(cf, height, t)
     time.sleep(0.1)
     print("sequence end...")
 
-def run_sequence(scf):
+def run_sequence(uri,drone_id):
     global a, height
-    cf = scf.cf    
-    cf.param.set_value('flightmode.posSet', '1')
-    threading.Thread(target=sequence, args=(cf, height, 3.0)).start()    
-    plot()
+    with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:        
+        reset_estimator(scf, drone_id)
+        local = Localization(scf)
+        
+        cf = scf.cf
+        toc=TOC(cf, drone_id)    
+        local.send_short_lpp_packet(dest_id='target', data = time.time())
+        cf.param.set_value('flightmode.posSet', '1')
+        sequence(cf, height, 3.0, toc, drone_id)
+        
+        print('-------------------------------------------------------')           
+        
+    #plot()
     
     
 
 if __name__ == '__main__':
     cflib.crtp.init_drivers(enable_debug_driver=False)
-
-    with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:
-        reset_estimator(scf)
-        input("press enter to start the flight")
-        run_sequence(scf)
+    input("press enter to start the flight")
+    threads = []
+    for drone_id, uri in uris.items():
+        thread = threading.Thread(target=run_sequence, args=(uri, drone_id))
+        thread.start()
+        threads.append(thread)
+       
+    for thread in threads:
+        thread.join()    

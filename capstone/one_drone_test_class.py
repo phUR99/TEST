@@ -12,6 +12,9 @@ from cflib.crazyflie.syncLogger import SyncLogger
 import logging
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import queue
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -24,7 +27,34 @@ a=[]
 flytime = 20
 height = 0.3
 position = [4,4]
+data_queue = queue.Queue()
+fig = plt.figure()
+ax = fig.add_subplot()
 
+def plot():        
+    global data_queue    
+    drone_trajectory = []
+
+    def update_plot(frame):               
+        if data_queue.empty():            
+            pass
+        else :            
+            ax.clear() 
+            sample = data_queue.get()                
+            drone_trajectory.append(sample)            
+            x_values = [pos[0] for pos in drone_trajectory]
+            y_values = [pos[1] for pos in drone_trajectory]
+            x = x_values[-1]
+            y = y_values[-1]
+            ax.plot(x_values[-1], y_values[-1],  marker = 'x', markersize = 10)             
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+
+            ax.set_title('Real_Time trajectory')
+
+    ani = FuncAnimation(fig, update_plot, interval=50, cache_frame_data=False)
+    plt.show()
+    
 class TOC:
     def __init__(self, cf):
         self._cf = cf 
@@ -33,11 +63,7 @@ class TOC:
         #self.log_conf.add_variable('ranging.distance2', 'float')
         #self.log_conf.add_variable('ranging.distance3', 'float')        
         self.log_conf.add_variable('tdoa3.hmDist', 'float')
-        #self.log_conf.add_variable('tdoa3.hmSeqOk', 'float')
-        #self.log_conf.add_variable('tdoa3.hmEst', 'float')
-        #self.log_conf.add_variable('radio.rssi', 'uint8_t')
-        #self.log_conf.add_variable('radio.numRxBc', 'uint16_t')
-        #self.log_conf.add_variable('radio.numRxUc', 'uint16_t')
+
         self._cf.log.add_config(self.log_conf)
         
         self.log_conf.data_received_cb.add_callback(self.position_callback)        
@@ -48,11 +74,8 @@ class TOC:
         #self.d2=data['ranging.distance2']
         #self.d3=data['ranging.distance3']        
         self.d4=data['tdoa3.hmDist']
-        #self.d5=data['tdoa3.hmSeqOk']
-        #self.d6=data['tdoa3.hmEst']
-        #self.d7=data['radio.rssi']
-        #self.d8=data['radio.numRxBc']
-        #self.d9=data['radio.numRxUc']
+
+
 def wait_for_position_estimator(scf):
     print('Waiting for estimator to find position...')
 
@@ -136,16 +159,21 @@ def run_sequence(scf):
     cf = scf.cf
     end_time = time.time() + flytime
     cf.param.set_value('flightmode.posSet', '1')
-    
+    def tdoa(d):
+        r = [1, 1]
+        return r    
     #take_off(cf, height, 3.0)
     while time.time() < end_time:  
         #cf.commander.send_hover_setpoint(0, 0, 0, height)
         #d = [data.d1,data.d2,data.d3,data.d4]            
         print('current data : ', data.d4)
+        data_queue.put(tdoa(data.d4))
         time.sleep(0.1)
 
     #land(cf, height, 3.0)				
+    
     time.sleep(0.1)
+    
 
 
 if __name__ == '__main__':
@@ -153,42 +181,37 @@ if __name__ == '__main__':
     threads = []
 
     with SyncCrazyflie(uri_target, cf=Crazyflie(rw_cache='./cache')) as scf_t, SyncCrazyflie(uri_anchor, cf=Crazyflie(rw_cache='./cache')) as scf_a :
+    
+        time.sleep(0.1)     
+        scf_t.cf.param.set_value('tdoa3.hmId', 254)
+        time.sleep(0.1)
+        scf_t.cf.param.set_value('tdoa3.hmAnchLog', 253)
+        time.sleep(0.1)
+        scf_t.cf.param.set_value('tdoa3.hmTwr', '1')
+        time.sleep(0.1)
+        scf_t.cf.param.set_value('tdoa3.hmTwrEstPos', '1')
+        time.sleep(0.1)
+        scf_a.cf.param.set_value('tdoa3.hmId', 253)        
+        time.sleep(0.1)
+        scf_a.cf.param.set_value('tdoa3.hmAnchLog', 254)
+        time.sleep(0.1)
+        scf_a.cf.param.set_value('tdoa3.hmTwr', '1') 
+        time.sleep(0.1)
+        scf_a.cf.param.set_value('tdoa3.hmTwrEstPos', '1')       
+        time.sleep(0.1)  
+
         reset_estimator(scf_t)
-        reset_estimator(scf_a)
 
         input("press enter to start the flight")
-        scf_t.cf.param.set_value('tdoa3.hmId', 254)
-        scf_t.cf.param.set_value('tdoa3.hmAnchLog', 253)
-        scf_t.cf.param.set_value('tdoa3.hmTwr', '1')
-        scf_t.cf.param.set_value('tdoa3.hmTwrEstPos', '1')
-        time.sleep(0.5)
-        scf_a.cf.param.set_value('tdoa3.hmId', 253)        
-        scf_a.cf.param.set_value('tdoa3.hmAnchLog', 254)
-        scf_a.cf.param.set_value('tdoa3.hmTwr', '1') 
-        scf_a.cf.param.set_value('tdoa3.hmTwrEstPos', '1')
-        time.sleep(0.5)
-        print(scf_a.cf.param.get_value(complete_name='tdoa3.hmId'))        
-        print(scf_a.cf.param.get_value(complete_name='tdoa3.hmAnchLog'))        
-        print(scf_a.cf.param.get_value(complete_name='tdoa3.hmTwr'))
-        print(scf_a.cf.param.get_value(complete_name='tdoa3.hmTwrEstPos'))
-
-        print(scf_t.cf.param.get_value(complete_name='tdoa3.hmId'))
-        print(scf_t.cf.param.get_value(complete_name='tdoa3.hmAnchLog'))
-        print(scf_t.cf.param.get_value(complete_name='tdoa3.hmTwr'))
-        print(scf_t.cf.param.get_value(complete_name='tdoa3.hmTwrEstPos'))
-        
         t1 = threading.Thread(target=run_sequence, args=(scf_t, ))
-        t2 = threading.Thread(target=run_sequence, args=(scf_a, ))
-        
         t1.start()
-        t2.start()
-        threads.append(t1)
-        threads.append(t2)
-        for thread in threads:
-            thread.join()
 
-        scf_a.close_link()
-        scf_t.close_link()
+        plot()        
+        
+        t1.join()
+
+
+
 
     
 
