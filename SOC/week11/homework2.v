@@ -9,7 +9,7 @@ module OZOdetector (
                 S3 =  2'b11;
     reg [1:0] pre_state, nxt_state;
     wire left, right;
-
+    
     debounce_switch btn0(
         .i_clk(clk),
         .i_switch(PUSH_SW_LEFT),
@@ -19,9 +19,12 @@ module OZOdetector (
         .i_clk(clk),
         .i_switch(PUSH_SW_RIGHT),
         .o_switch(right)
-    );
-
+    );    
+    
+    //LED 현재 상태가 S3 일 때 불빛이 들어오도록 했습니다.
     assign LED = (pre_state == S3) ? 1'b1 : 1'b0;
+
+
     always @(pre_state or left or right) begin
         
         /*

@@ -8,7 +8,7 @@ module RisingEdgeDetector (
                 S2 =  2'b10;
     reg [1:0] pre_state, nxt_state;
     wire left, right;
-
+    
     debounce_switch btn0(
         .i_clk(clk),
         .i_switch(PUSH_SW_LEFT),
@@ -18,9 +18,8 @@ module RisingEdgeDetector (
         .i_clk(clk),
         .i_switch(PUSH_SW_RIGHT),
         .o_switch(right)
-    );
-
-
+    );    
+    //현재 상태가 S1일 때 불빛이 들어오도록 했습니다.
     assign LED = (pre_state == S1) ? 1'b1 : 1'b0;
 
     always @(pre_state or left or right) begin
@@ -32,7 +31,7 @@ module RisingEdgeDetector (
         */
         case (pre_state)
             S0 : if (left) nxt_state = S0; else if(right) nxt_state = S1; else nxt_state = S0;
-            S1 : if (left) nxt_state = S0; else if(right) nxt_state = S2; else nxt_state = S2;
+            S1 : if (left) nxt_state = S0; else if(right) nxt_state = S2; else nxt_state = S1;
             S2 : if (left) nxt_state = S0; else if(right) nxt_state = S2; else nxt_state = S2;
             default: nxt_state = S0;
         endcase
