@@ -11,11 +11,10 @@ clk, rst_n, ReadEn, ReadReg
     output [3:0] ReadReg;
     
     wire [14:0] count;
-    
-    // �ڵ� �ۼ�
-    
-    // module RingCounter(count,clk,rst_n, en);
-    RingCounterX3 X(count, clk, rst_n, ReadEn);
+
+    // module RingCounterX3(clk,rst_n, en, count);
+    RingCounterX3 #(Init) X(clk, rst_n, ReadEn, count);
+    //module AddressEncoder(AddrIn, AddrOut);
     AddressEncoder A(count, ReadReg);
     
 endmodule

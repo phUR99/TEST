@@ -23,7 +23,7 @@ module AddressEncoder(AddrIn, AddrOut);
             15'b000_1000_0000_0000: AddrOut = 4'hc;
             15'b001_0000_0000_0000: AddrOut = 4'hd;
             15'b010_0000_0000_0000: AddrOut = 4'he;
-            default: AddrOut = 0;
+            default: AddrOut = 4'hf;
         endcase
     end
 

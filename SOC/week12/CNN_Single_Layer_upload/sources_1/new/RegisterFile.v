@@ -16,28 +16,23 @@ WriteReg, WriteEn, WriteData, ReadEn, ReadData1, ReadData2, ReadData3);
     
     // �ڵ� �ۼ�
 
-    reg [W-1:0] ram[N-1:0];
+    reg [W-1:0] reg_file[0:N-1];
 
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
-            ReadData1 <= 0;
-            ReadData2 <= 0;
-            ReadData3 <= 0;
+            ReadData1 <= reg_file[ReadReg1];
+            ReadData2 <= reg_file[ReadReg2];
+            ReadData3 <= reg_file[ReadReg3];
         end
         else if(ReadEn) begin
-            ReadData1 <= ram[ReadReg1];
-            ReadData2 <= ram[ReadReg2];
-            ReadData3 <= ram[ReadReg3];
+            ReadData1 <= reg_file[ReadReg1];
+            ReadData2 <= reg_file[ReadReg2];
+            ReadData3 <= reg_file[ReadReg3];
         end
     end
 
-    always @(posedge clk or negedge rst_n) begin
-        if(!rst_n) begin
-            ram[WriteReg] <= 0;
-        end
-        else if(WriteEn) begin
-            ram[WriteReg] <= WriteData;
-        end
+    always @(posedge clk) begin
+        if(WriteEn) reg_file[WriteReg] <= WriteData;                    
     end
 
     

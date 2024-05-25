@@ -9,8 +9,8 @@ clk, rst_n, Start, WriteReg
     input Start;
     output [3:0] WriteReg;
     wire [14:0] count;
-    // �ڵ� �ۼ�
-
+    // module RingCounter(count,clk,rst_n, en);
     RingCounter X(count, clk, rst_n, Start);
+    // module AddressEncoder(AddrIn, AddrOut);
     AddressEncoder A(count, WriteReg);
 endmodule
