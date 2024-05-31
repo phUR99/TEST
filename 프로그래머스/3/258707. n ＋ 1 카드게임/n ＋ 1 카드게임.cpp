@@ -12,7 +12,6 @@ int solution(int coin, vector<int> cards) {
     int n = (int)cards.size();    
     bool used[1005] = {false};
     bool canuse[1005] = {false};
-    bool done = false;
 
     int life = 0;
     
@@ -60,7 +59,6 @@ int solution(int coin, vector<int> cards) {
             
         }
         if(flag) continue;       
-        done = false; 
         break;
     }        
     
@@ -70,6 +68,8 @@ int solution(int coin, vector<int> cards) {
             if(!used[cards[i]] && coin){
                 coin--;
                 life++;
+                used[cards[i]] = true;
+                used[n+1-cards[i]] = true;
             }                        
         }
         for (int i = n/3; i < n; i++)
@@ -83,7 +83,9 @@ int solution(int coin, vector<int> cards) {
         }
         
     }
-    answer = min(life + 1, n/3+1);
+    answer = min(n/3, life) + 1;
     
     return answer;
 }
+
+
