@@ -1,3 +1,0 @@
-iverilog -o test.vvp test.v testbench.v
-vvp test.vvp
-gtkwave test.vcd
