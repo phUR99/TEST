@@ -14,7 +14,7 @@ ll d[105][105];
 int map[105][105];
 int n;
 ll dfs(int x, int y) {
-	if (x >= n && y >= n) return 0;
+	if (x >= n || y >= n) return 0;
 	if (x == n - 1 && y == n - 1) return 1;
 	if (map[x][y] == 0) return 0;
 	if (d[x][y] != -1) return d[x][y];
