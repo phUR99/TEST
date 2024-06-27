@@ -9,6 +9,15 @@ const int dy[] = {0, 0, -1 ,1};
 int dist[1505][1505];
 bool visited[1505][1505];
 
+struct node
+{
+    int d, x, y;
+    const bool operator<(const node & a) const{
+        return a.d < d;
+    }
+};
+
+
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     cin >> R >> C;
@@ -57,27 +66,27 @@ int main(){
 
         }        
     }    
-    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+    priority_queue<node> pq;
 
     visited[st.first][st.second] = true;
-    pq.push({0, {st.first, st.second}});
+    pq.push({0, st.first, st.second});
     int ans = 0;
 
     while (!pq.empty())
     {
         auto cur = pq.top(); pq.pop();
-        ans = max(ans, cur.first);
-        if(cur.second.first == ed.first && cur.second.second == ed.second){
+        ans = max(ans, cur.d);
+        if(cur.x == ed.first && cur.y == ed.second){
             cout << ans;
             return 0;
         }
         for (int i = 0; i < 4; i++)
         {
-            int nx = cur.second.first + dx[i];
-            int ny = cur.second.second + dy[i];
+            int nx = cur.x + dx[i];
+            int ny = cur.y + dy[i];
             if(nx < 0 || nx >= R || ny <0 || ny >= C) continue;
             if(visited[nx][ny]) continue;                        
-            pq.push({dist[nx][ny], {nx, ny}});
+            pq.push({dist[nx][ny], nx, ny});
             visited[nx][ny] = true;
                         
         }
