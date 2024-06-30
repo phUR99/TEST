@@ -12,16 +12,7 @@ using namespace std;
 #define ll long long
 int d[100050];
 vector<pair<int, int>> vec;
-// 0-1 knapsack problem
-/*
-	            if(W[row] > limit){
-                DP[row][limit] = DP[row-1][limit];
-            }
-            //2. 담을 수 있는 경우
-            else{
-                DP[row][limit] = max(DP[row-1][limit - W[row]] + V[row]  ,  DP[row-1][limit]);
-            }
-*/
+
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
@@ -36,8 +27,6 @@ int main(void) {
 	sort(vec.begin(), vec.end());
 	for (int i = 0; i < n; i++)
 	{
-		//중복되는 배낭을 추가하지 않기 위해서 k부터 내림차순으로 더해준다.
-		
 		for (int j = k; j >= vec[i].first; j--) {
 			d[j] = max(d[j - vec[i].first] + vec[i].second, d[j]);
 
