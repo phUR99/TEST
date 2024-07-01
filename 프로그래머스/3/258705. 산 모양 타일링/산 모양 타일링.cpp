@@ -1,7 +1,12 @@
 #include <string>
 #include <vector>
 #include <string.h>
+/*
+사다리꼴 -> 정삼각형의 예외 모양.. 예외를 바로 계산하기 VS 전체에서 예외를 제외하기..
+나올 수 있는 경우의 수 ? 4 ^1e6.. 백트래킹으로는 해결하기 어렵다 -> 메모이제이션 활용하기..
 
+
+*/
 using namespace std;
 int cache[100005][4];
 int arr[100005];
