@@ -16,6 +16,7 @@ int solution(){
     for (int i = 0; i < N+1; i++)
     {
         ret += dist(arr[idx[i]].first, arr[idx[i]].second, arr[idx[i+1]].first, arr[idx[i+1]].second);
+        if(ret >= answer) return 987654321;
     }
     return ret;
 }
