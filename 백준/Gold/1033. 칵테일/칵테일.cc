@@ -6,8 +6,10 @@ long long gcd(long long a, long long b){
     if(b==0) return a;
     return  gcd(b, a % b);
 }
-bool visited[10];
 long long arr[10];
+long long lcm(long long a, long long b){
+    return a * b / gcd(a, b);
+}
 
 struct node{
     int to;
@@ -26,23 +28,21 @@ int main(){
         cin >> f >> t >> m >> d;
         long long mod = gcd(m, d);
         m /= mod; d /= mod;
-        A *= m * d;
+        A *= lcm(m ,d);
         adj[f].push_back({t, d, m});
         adj[t].push_back({f, m, d});
     }
-    queue<pair<int, long long>> q;
-    q.push({0, A});
-    visited[0] = true;
+    queue<int> q;
+    q.push(0);
     arr[0] = A;
     while (!q.empty())
     {
         auto cur = q.front(); q.pop();
-        for (auto nxt : adj[cur.first])
+        for (auto nxt : adj[cur])
         {
-            if(visited[nxt.to]) continue;
-            arr[nxt.to] = (arr[cur.first] / nxt.d) * nxt.m;
-            q.push({nxt.to, arr[nxt.to]});
-            visited[nxt.to] = true;
+            if(arr[nxt.to]) continue;
+            arr[nxt.to] = (arr[cur] / nxt.d) * nxt.m;
+            q.push({nxt.to});            
         }        
     }
     for (int i = 0; i < N; i++)
