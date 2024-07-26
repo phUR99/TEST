@@ -14,7 +14,7 @@ bool bfs(ll x){
     while (!pq.empty())
     {
         auto cur = pq.top(); pq.pop();
-        if(-cur.first > min(C, dist[cur.second])) continue;
+        if(-cur.first > dist[cur.second]) continue;
         for (auto nxt : adj[cur.second])
         {
             if(-cur.first + nxt.first < dist[nxt.second] && nxt.first <= x){
@@ -23,14 +23,14 @@ bool bfs(ll x){
             }
         }        
     }
-    return dist[B] != INF;
+    return dist[B] <= C;
 }
 
 int main(){
     fastio;
     cin >> N >> M >> A >> B >> C;
     ll u, v, c;
-    ll low = 1; ll high = -1;
+    ll low = INF; ll high = -1;
     ll ans = -1;
     for (int i = 0; i < M; i++)
     {
@@ -38,6 +38,7 @@ int main(){
         adj[u].push_back({c, v});
         adj[v].push_back({c, u});
         high = max(high, c);
+        low = min(low, c);
     }        
     while (low <= high)
     {
