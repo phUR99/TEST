@@ -10,7 +10,6 @@ struct node
     const bool operator<(const node &a) const{
         return a.l < l;
     }
-    node(int _d, int _l, int _t) {d =_d; l =_l; t = _t;};
 };
 bool cmp(const node &a, const node &b) {
     return a.t < b.t;
@@ -33,14 +32,14 @@ int main(){
     for (int i = 0; i < R; i++)
     {
         cin >> s >> d >> t >> l;
-        adj[s].push_back(node(d, l, t));
+        adj[s].push_back({d, l, t});
     }
     for (int i = 1; i <= N; i++)
     {
         sort(adj[i].begin(), adj[i].end(), cmp);
     }
     
-    pq.push(node(1, 0, 0));
+    pq.push({1, 0, 0});
     dist[1][0] = 0;
     while (!pq.empty())
     {
@@ -48,10 +47,10 @@ int main(){
         if(cur.l > dist[cur.d][cur.t]) continue;
         for (auto nxt : adj[cur.d])
         {      
-            if(cur.t + nxt.t > K ) break;
+            if(cur.t + nxt.t > K) break;
             if(dist[nxt.d][cur.t + nxt.t] > cur.l + nxt.l){
                 dist[nxt.d][cur.t + nxt.t] = cur.l + nxt.l;
-                pq.push(node(nxt.d, dist[nxt.d][cur.t+nxt.t], cur.t+nxt.t));
+                pq.push({nxt.d, dist[nxt.d][cur.t+nxt.t], cur.t+nxt.t});
             }
         }        
     }
