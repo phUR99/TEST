@@ -1,62 +1,57 @@
 #include <bits/stdc++.h>
-
 using namespace std;
+#define fastio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
+int tree[400050];
+int answer[100005];
 
-int n;
-int ar[100001];
 
-inline int mid(int stt, int end) { return stt + (end - stt) / 2; }
+int query(int left, int right, int node, int value){
+    if(left == right) return left;
+    int mid = (left + right)/2;
 
-int init(vector<int> &tree, int node, int start, int end)
-{
-    if (start == end) return tree[node] = 1;
-    int m = mid(start, end);
-    return tree[node] = init(tree, node * 2, start, m) + init(tree, node * 2 + 1, m + 1, end);
+    if(tree[node*2] >= value) return query(left, mid, node*2, value);
+    else return query(mid+1, right, node*2+1, value - tree[node*2]);
 }
-
-void update(vector<int> &tree, int node, int start, int end, int idx, int diff)
-{
-    if (idx < start || idx > end) return;
-
-    tree[node] += diff;
-
-    if (start != end)
-    {
-        int m = mid(start, end);
-        update(tree, node * 2, start, m, idx, diff);
-        update(tree, node * 2 + 1, m + 1, end, idx, diff);
+void update(int left, int right, int node, int target){
+    if(left > target || right < target) return;
+    if(left == right) {
+        tree[node] = 0;
+        return;
     }
+    int mid = (left + right)/2;
+    update(left, mid, node*2, target);
+    update(mid+1, right, node*2+1, target);
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
 }
+int N;
 
-int query(vector<int> &tree, int node, int start, int end, int kth)
-{
-    if (start == end) return start;
-    int m = mid(start, end);
-    int stack_left = tree[node * 2];
-
-    if (stack_left > kth) return query(tree, node * 2, start, m, kth);
-    return query(tree, node * 2 + 1, m + 1, end, kth - stack_left);
-}
-
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
-    cin >> n;
-
-    vector<int> segtree(n * 4);
-    init(segtree, 1, 1, n);
-    
-    for (int i = 1; i <= n; ++i)
+int main(){
+    fastio;
+    int s = 1;
+    cin >> N;
+    while(N > s) s*=2;
+    for (int i = 0; i < N; i++)
     {
-        int x;
-        cin >> x;
-        int val = query(segtree, 1, 1, n, x);
-        ar[val] = i;
-        update(segtree, 1, 1, n, val, -1);
+        tree[i+s] = 1;
     }
+    for (int i = s-1; i > 0; i--)
+    {
+        tree[i] = tree[i*2] + tree[i*2+1];
+    }
+        
+    int ret;
+    int q;
 
-    for (int i = 1; i <= n; ++i)
-        cout << ar[i] << '\n';
+    for (int i = 1; i <= N; i++)
+    {
+        cin >> q;
+        ret = query(1, s, 1, q+1);
+        answer[ret] = i;
+        update(1, s, 1, ret);
+    }
+    for (int i = 1; i <= N; i++)
+    {
+        cout << answer[i] <<'\n';
+    }    
+    return 0;
 }
