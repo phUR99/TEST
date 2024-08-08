@@ -26,7 +26,7 @@ int main(){
     cin >> N >> K >> R;
     for (int i = 0; i <= N; i++)
     {
-        fill(dist[i], dist[i]+10050,INF);
+        fill(dist[i], dist[i]+K+1,INF);
     }
     int s, d, l, t;
     for (int i = 0; i < R; i++)
