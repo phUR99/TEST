@@ -9,7 +9,8 @@ int N, M;
 
 struct node
 {
-    int cost, nxt, price;
+    long long cost;
+    int nxt, price;
     const bool operator<(const node &a) const {
         return a.cost < cost;
     }
