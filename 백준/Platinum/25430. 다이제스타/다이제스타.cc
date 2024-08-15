@@ -5,7 +5,7 @@ using namespace std;
 const ll inf = 0x3fffffffffffffff;
 map<int, ll> dist[50050];
 int n, m;
-vector<pair<int, int>> adj[50050];
+vector<pair<ll, int>> adj[50050];
 struct node
 {
     ll dist;
@@ -38,6 +38,7 @@ int main(){
     while (!pq.empty())
     {
         node cur = pq.top(); pq.pop();
+        if(cur.edge == e) answer = min(answer, cur.dist);
         if(cur.dist > dist[cur.edge][cur.pre]) continue;
         for (auto nxt : adj[cur.edge])
         {
@@ -45,9 +46,6 @@ int main(){
                 dist[nxt.second][nxt.first] = nxt.first + cur.dist;
                 int pre = nxt.first;
                 pq.push({nxt.first + cur.dist, pre, nxt.second});
-                if(nxt.second == e){
-                    answer  = min(answer, nxt.first + cur.dist);                    
-                }
             }
         }        
     }
