@@ -7,35 +7,18 @@ using namespace std;
     cout.tie(NULL)
 int N, M, S, T;
 int group[10005];
+int number[10005];
 int p[10005];
 bool finished[10005];
 int cache[10005];
-
 int id;
 int cnt;
 vector<vector<int>> adj, gAdj;
-
+/*
+현재는 좀 비효율적
+bfs로 수정
+*/
 stack<int> s;
-int find(int nowGroup)
-{
-    int cur = 0;
-    for (int i = 1; i <= N; i++)
-    {
-        cur += (nowGroup == group[i]);
-    }
-    if (nowGroup == group[T])
-        return cur;
-    int &ret = cache[nowGroup];
-    if (ret != -1)
-        return ret;
-    ret = -987654321;
-
-    for (auto nxtG : gAdj[nowGroup])
-    {
-        ret = max(ret, find(nxtG) + cur);
-    }
-    return ret;
-}
 
 int solve(int cur)
 {
@@ -60,6 +43,7 @@ int solve(int cur)
             int now = s.top();
             s.pop();
             group[now] = cnt;
+            number[cnt]++;
             finished[now] = true;
             if (now == cur)
                 break;
@@ -94,11 +78,24 @@ int main()
                 gAdj[group[i]].push_back(group[j]);
         }
     }
-    memset(cache, -1, sizeof(cache));
-    int answer = find(group[S]);
-    if (answer <= 0)
-        cout << 0;
-    else
-        cout << answer;
+    memset(cache, 0, sizeof(cache));
+
+    queue<int> q;
+    q.push(group[S]);
+    cache[group[S]] = number[group[S]];
+    while (!q.empty())
+    {
+        int cur = q.front();
+        q.pop();
+        for (auto nxt : gAdj[cur])
+        {
+            if (cache[nxt] < cache[cur] + number[nxt])
+            {
+                cache[nxt] = cache[cur] + number[nxt];
+                q.push(nxt);
+            }
+        }
+    }
+    cout << cache[group[T]] << '\n';
     return 0;
 }
