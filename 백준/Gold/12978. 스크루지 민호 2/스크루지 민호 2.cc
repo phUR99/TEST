@@ -1,34 +1,42 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+#define fastio                       \
+    ios_base::sync_with_stdio(NULL); \
+    cin.tie(NULL);                   \
+    cout.tie(NULL)
 using namespace std;
-typedef long long ll;
-int n;
-int dp[100100][2];
-int visited[100100];
-vector<int> tree[100100];
-void dfs(int cur){
-    if(visited[cur])
-        return;
-    visited[cur] = 1;
-    dp[cur][0] = 0;
-    dp[cur][1] = 1;
-    for(auto next : tree[cur]){
-        if(visited[next])
+vector<vector<int>> adj;
+bool visited[100500];
+int cache[100500][2];
+
+void solve(int cur)
+{
+    visited[cur] = true;
+    cache[cur][0] = 0;
+    cache[cur][1] = 1;
+    for (auto nxt : adj[cur])
+    {
+        if (visited[nxt])
             continue;
-        dfs(next);
-        dp[cur][0] += dp[next][1];
-        dp[cur][1] += min(dp[next][1],dp[next][0]);
+        solve(nxt);
+        cache[cur][0] += cache[nxt][1];
+        cache[cur][1] += min(cache[nxt][1], cache[nxt][0]);
     }
 }
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cin>>n;
-    for(int i=1; i<n; i++){
-        int a,b; cin>>a>>b;
-        tree[a].push_back(b);
-        tree[b].push_back(a);
+
+int main()
+{
+    fastio;
+    int N;
+    cin >> N;
+    adj.resize(N + 1);
+    for (int i = 0; i < N - 1; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    dfs(1);
-    cout << min(dp[1][0],dp[1][1]);
+    solve(1);
+    cout << min(cache[1][0], cache[1][1]);
     return 0;
 }
