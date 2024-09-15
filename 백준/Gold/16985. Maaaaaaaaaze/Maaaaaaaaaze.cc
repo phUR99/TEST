@@ -78,8 +78,6 @@ int bfs()
         int x = cur[0];
         int y = cur[1];
         int z = cur[2];
-        if (dist[x][y][z] >= answer)
-            return 987654321;
         for (int dir = 0; dir < 6; dir++)
         {
             int nx = x + dx[dir];
@@ -90,12 +88,12 @@ int bfs()
             if (dist[nx][ny][nz] != -1 || board[nx][ny][nz] == 0)
                 continue;
             dist[nx][ny][nz] = dist[x][y][z] + 1;
+            if (nx == 4 && ny == 4 && nz == 4)
+                return dist[nx][ny][nz];
             q.push({nx, ny, nz});
         }
     }
-    if (dist[4][4][4] == -1)
-        return 987654321;
-    return dist[4][4][4];
+    return 987654321;
 }
 
 int main()
@@ -129,6 +127,8 @@ int main()
                 }
             }
             answer = min(bfs(), answer);
+            if (answer == 12)
+                break;
         }
     } while (next_permutation(arr.begin(), arr.end()));
     if (answer == 987654321)
