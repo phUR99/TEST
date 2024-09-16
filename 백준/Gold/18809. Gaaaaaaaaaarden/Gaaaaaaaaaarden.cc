@@ -19,7 +19,8 @@ int solve()
     memset(isFlower, 0, sizeof(isFlower));
     memset(visitedRed, -1, sizeof(visitedRed));
     memset(visitedGreen, -1, sizeof(visitedGreen));
-    for (int i = 0; i < arr.size(); i++)
+    int l = arr.size();
+    for (int i = 0; i < l; i++)
     {
         if (arr[i] == 1)
         {
