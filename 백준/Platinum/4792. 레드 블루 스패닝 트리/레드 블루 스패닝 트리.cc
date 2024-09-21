@@ -5,7 +5,14 @@
     cout.tie(NULL)
 using namespace std;
 int parent[1005];
-
+/*
+파란 간선의 개수를 최소로 사용해서 얻을 수 있는 스패닝 트리 t1
+파란 간선의 개수를 최대로 사용해서 얻을 수 있는 스패닝 트리 t2
+1. t1에서 파란 간선을 하나 추가한다 -> 사이클이 생긴다
+2. 사이클에서 빨간 간선을 하나 제거한다.
+3. 이 과정을 t2가 될때까지 반드시 계속할 수 있다.
+따라서 t1과 t2 과정 사이에 tk가 있다면 반드시 만들수 있다.
+*/
 int find(int u)
 {
     if (u == parent[u])
@@ -20,8 +27,8 @@ void merge(int u, int v)
         return;
     parent[u] = v;
 }
-
-int search(vector<vector<int>> &arr, int n)
+vector<vector<int>> arr;
+int search(int n)
 {
     for (int i = 1; i <= n; i++)
     {
@@ -50,7 +57,7 @@ int main()
         cin >> n >> m >> k;
         if (n == 0)
             break;
-        vector<vector<int>> arr;
+        arr.clear();
         for (int i = 0; i < m; i++)
         {
             char c;
@@ -62,9 +69,9 @@ int main()
                 arr.push_back({0, u, v});
         }
         sort(arr.begin(), arr.end(), greater<>());
-        int M = search(arr, n);
+        int M = search(n);
         reverse(arr.begin(), arr.end());
-        int mm = search(arr, n);
+        int mm = search(n);
         if (mm <= k && k <= M)
             cout << "1\n";
         else
