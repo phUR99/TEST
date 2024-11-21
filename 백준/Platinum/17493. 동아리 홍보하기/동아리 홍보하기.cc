@@ -4,44 +4,51 @@ using namespace std;
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL)
 #define ll long long
-int n;
+int n, m;
+bool visited[200005];
 vector<vector<int>> adj;
-bool visited[1000005];
 int answer = 0;
-const int need = 0;
-const int unneed = 1;
+const int NEEDED = 0;
+const int UNNEED = 1;
+const int STITCH = 2;
 
-int solve(int here)
+int dfs(int here)
 {
     visited[here] = true;
-    vector<int> status(2, 0);
-    for (auto there : adj[here])
+    vector<int> state(3, 0);
+    for (int there : adj[here])
     {
         if (visited[there])
             continue;
-        ++status[solve(there)];
+        state[dfs(there)]++;
     }
-    if (status[need])
+    if (state[NEEDED])
     {
         answer++;
-        return unneed;
+        return STITCH;
     }
-    return need;
+    if (state[STITCH])
+        return UNNEED;
+    return NEEDED;
 }
+
 int main()
 {
     fastio;
-    cin >> n;
+    cin >> n >> m;
     adj.resize(n + 1);
-    for (int i = 0; i < n - 1; i++)
+    while (m--)
     {
         int u, v;
         cin >> u >> v;
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    solve(1);
-    cout << answer << '\n';
-
+    for (int i = 1; i <= n; i++)
+    {
+        if (!visited[i] && dfs(i) == NEEDED)
+            answer++;
+    }
+    cout << answer;
     return 0;
 }
