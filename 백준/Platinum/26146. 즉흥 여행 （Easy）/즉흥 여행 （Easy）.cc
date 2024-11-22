@@ -7,7 +7,7 @@ using namespace std;
 vector<int> adj[200005];
 vector<int> inv[200005];
 bool vis[200005];
-//어떤 그래프에서 모든 점이 사이클임을 증명하고 싶으면 역으로 된 간선 그래프에 대해서 dfs를 실행해도 전부 다 순회할 수 있어야 한다.
+
 void dfs(int st) {
     
     vis[st] = true;
