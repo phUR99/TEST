@@ -14,13 +14,12 @@ int main()
     for (auto &i : arr)
     {
         cin >> i;
-        i = -i;
     }
-    if (next_permutation(arr.begin(), arr.end()))
+    if (prev_permutation(arr.begin(), arr.end()))
     {
         for (auto &i : arr)
         {
-            cout << -i << ' ';
+            cout << i << ' ';
         }
     }
     else
