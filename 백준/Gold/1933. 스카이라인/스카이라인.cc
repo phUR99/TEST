@@ -5,6 +5,15 @@ using namespace std;
     cin.tie(NULL)
 #define ll long long
 int n;
+/*
+x좌표는 큰 값을 먼저 확인
+y좌표는 작은 값을 먼저 확인
+map을 사용하였으나 multiset을 사용하는 방법도 있음
+
+고려해야하는 케이스 2
+1. 건물이 겹칠 때
+2. 건물이 붙어있을 때때
+*/
 
 int main()
 {
@@ -19,29 +28,28 @@ int main()
         arr.push_back({y, 1, h});
     }
     sort(arr.begin(), arr.end());
-    map<int, int> height;
-    height[0] = 1;
+    multiset<int> height;
+    height.insert(0);
     for (auto i : arr)
     {
+
         int x = i[0];
         int end = -i[1];
         int h = i[2] * i[1];
         if (end == 1)
         {
-            if (height.lower_bound(h) == height.end() && height[h] == 0)
+            if (*prev(height.end()) < h)
             {
                 cout << x << ' ' << h << ' ';
             }
-            height[h]++;
+            height.insert(h);
         }
         else
         {
-            height[h]--;
-            if (height[h] == 0)
-                height.erase(h);
-            if (height.lower_bound(h) == height.end())
+            height.erase(height.find(h));
+            if (*prev(height.end()) < h)
             {
-                cout << x << ' ' << prev(height.end())->first << ' ';
+                cout << x << ' ' << *prev(height.end()) << ' ';
             }
         }
     }
