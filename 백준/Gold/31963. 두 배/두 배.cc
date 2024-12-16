@@ -4,7 +4,8 @@ using namespace std;
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL)
 #define ll long long
-int arr[255555];
+ll arr[255555];
+int cache[250005];
 int n;
 
 int main()
@@ -15,15 +16,31 @@ int main()
     {
         cin >> arr[i];
     }
-    int cnt = 0;
+    ll cnt = 0;
     for (int i = 1; i < n; i++)
     {
-        while (arr[i - 1] > arr[i])
+        cache[i] = cache[i - 1];
+
+        if (arr[i - 1] >= arr[i])
         {
-            arr[i] *= 2;
-            cnt++;
+            ll now = arr[i];
+            while (now < arr[i - 1])
+            {
+                now *= 2;
+                cache[i]++;
+            }
         }
-        // cout << cnt << ' ';
+        else
+        {
+            ll now = arr[i - 1];
+            while (now * 2 <= arr[i])
+            {
+                now *= 2;
+                cache[i]--;
+            }
+            cache[i] = max(0, cache[i]);
+        }
+        cnt += cache[i];
     }
     cout << cnt;
 
