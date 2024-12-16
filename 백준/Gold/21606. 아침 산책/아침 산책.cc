@@ -6,8 +6,8 @@ using namespace std;
 #define ll long long
 
 vector<vector<int>> adj;
-int outside[20005];
-bool visited[20005];
+int outside[200005];
+bool visited[200005];
 int n;
 int dfs(int here)
 {
