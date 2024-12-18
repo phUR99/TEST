@@ -6,22 +6,20 @@ using namespace std;
 #define ll long long
 
 int arr[15];
-int cache[5005][5005];
+int cache[5005][105];
 int n, m;
-int caching(int begin, int sum)
+int caching(int sum, int turn)
 {
-    if (sum == n)
+    if (sum == 0)
         return 0;
-    if (sum > n)
-        return -987654321;
-    int &ret = cache[begin][sum];
+    int &ret = cache[sum][turn];
     if (ret != -1)
         return ret;
     ret = -987654321;
     for (int i = 0; i < m; i++)
     {
-        // cout << begin << ' ' << arr[i] << '\n';
-        ret = max(ret, caching(begin + arr[i], sum + begin + arr[i]) + arr[i]);
+        if (sum - turn * arr[i] >= 0)
+            ret = max(ret, caching(sum - turn * arr[i], turn + 1) + arr[i]);
     }
     return ret;
 }
@@ -34,7 +32,7 @@ void solve()
     }
 
     memset(cache, -1, sizeof(cache));
-    int ret = caching(0, 0);
+    int ret = caching(n, 1);
     if (ret < 0)
         ret = -1;
     cout << ret << '\n';
