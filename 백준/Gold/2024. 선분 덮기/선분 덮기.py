@@ -1,4 +1,6 @@
 import heapq
+import sys
+input = sys.stdin.readline
 m = int(input())
 arr = []
 while 1:
