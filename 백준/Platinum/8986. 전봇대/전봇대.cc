@@ -4,7 +4,7 @@ using namespace std;
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL)
 #define ll long long
-ll arr[10005];
+ll arr[100005];
 int n;
 ll solve(ll x)
 {
