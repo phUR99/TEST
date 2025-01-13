@@ -13,8 +13,7 @@ int main()
     ll ans = 1;
     for (ll i = 1; i <= n; i++)
     {
-        ans *= i;
-        ans %= m;
+        ans = ans * i % m;
     }
     cout << ans;
     return 0;
