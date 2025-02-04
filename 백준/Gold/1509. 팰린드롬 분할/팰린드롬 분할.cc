@@ -5,21 +5,26 @@ using namespace std;
     cin.tie(NULL)
 #define ll long long
 int cache[2505];
+bool isPal[2505][2505];
 int n;
 string str;
-bool isPalindrome(string &s)
+void preprocess()
 {
-    int l = s.size();
-    for (int i = 0; i < l / 2; i++)
+    for (int i = 0; i < n; i++)
+        isPal[i][i] = true;
+    for (int i = 0; i < n - 1; i++)
+        isPal[i][i + 1] = (str[i] == str[i + 1]);
+    for (int len = 3; len <= n; len++)
     {
-        if (s[i] != s[l - 1 - i])
-            return false;
+        for (int i = 0; i + len - 1 < n; i++)
+        {
+            int j = i + len - 1;
+            isPal[i][j] = (str[i] == str[j] && isPal[i + 1][j - 1]);
+        }
     }
-    return true;
 }
 int solve(int idx)
 {
-    // cout << idx << ' ';
     if (idx == n)
         return 0;
     int &ret = cache[idx];
@@ -30,8 +35,7 @@ int solve(int idx)
     ret = min(ret, solve(idx + 1) + 1);
     for (int i = idx + 1; i < n; i++)
     {
-        tmp += str[i];
-        if (isPalindrome(tmp))
+        if (isPal[idx][i])
             ret = min(ret, 1 + solve(i + 1));
     }
     return ret;
@@ -43,6 +47,7 @@ int main()
     cin >> str;
     memset(cache, -1, sizeof(cache));
     n = str.size();
+    preprocess();
     int ret = solve(0);
     cout << ret;
     return 0;
