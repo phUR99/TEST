@@ -1,4 +1,5 @@
 -- 코드를 입력하세요
+
 SELECT
     FOOD_TYPE,
     REST_ID,
@@ -17,8 +18,5 @@ WHERE
             FOOD_TYPE = R.FOOD_TYPE
     )            
             
-GROUP BY
-    FOOD_TYPE
 ORDER BY
     FOOD_TYPE DESC
-    
