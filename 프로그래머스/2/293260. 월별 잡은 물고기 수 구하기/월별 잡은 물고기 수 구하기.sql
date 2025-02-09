@@ -1,0 +1,12 @@
+-- 코드를 작성해주세요
+SELECT
+    COUNT(*) AS FISH_COUNT,
+    DATE_FORMAT(TIME, '%m') -'0' AS MONTH
+FROM
+    FISH_INFO
+GROUP BY
+    MONTH
+HAVING
+    FISH_COUNT > 0
+ORDER BY
+    MONTH ASC;
