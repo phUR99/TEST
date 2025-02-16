@@ -6,12 +6,12 @@ using namespace std;
 #define ll long long
 string arr[20];
 int n;
-int cache[16][1 << 16][26];
-int solve(int cnt, int s, int l)
+int cache[1 << 16][26];
+int solve(int s, int l)
 {
-    if (cnt == n)
+    if (s == (1 << n) - 1)
         return 0;
-    int &ret = cache[cnt][s][l];
+    int &ret = cache[s][l];
     if (ret != -1)
         return ret;
     ret = 0;
@@ -19,8 +19,8 @@ int solve(int cnt, int s, int l)
     {
         if (s & (1 << i))
             continue;
-        if (cnt == 0 || l == arr[i].front() - 'A')
-            ret = max(ret, (int)arr[i].length() + solve(cnt + 1, s | (1 << i), arr[i].back() - 'A'));
+        if (s == 0 || l == arr[i].front() - 'A')
+            ret = max(ret, (int)arr[i].length() + solve(s | (1 << i), arr[i].back() - 'A'));
     }
     return ret;
 }
@@ -34,7 +34,7 @@ int main()
     {
         cin >> arr[i];
     }
-    int ret = solve(0, 0, 0);
+    int ret = solve(0, 0);
     cout << ret;
 
     return 0;
