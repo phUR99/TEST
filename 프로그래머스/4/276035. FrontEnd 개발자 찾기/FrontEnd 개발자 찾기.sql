@@ -1,0 +1,24 @@
+-- 코드를 작성해주세요
+WITH TOTAL AS(
+    SELECT
+        SUM(CODE) AS SUM
+    FROM
+        SKILLCODES
+    GROUP BY
+        CATEGORY
+    HAVING
+        CATEGORY = 'Front End'
+)
+SELECT
+    ID,
+    EMAIL,
+    FIRST_NAME,
+    LAST_NAME
+FROM
+    DEVELOPERS D
+JOIN
+    TOTAL T
+ON
+    T.SUM & D.SKILL_CODE > 0
+ORDER BY
+    ID ASC;
