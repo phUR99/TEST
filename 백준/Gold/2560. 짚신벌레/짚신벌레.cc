@@ -6,56 +6,38 @@ using namespace std;
 #define ll long long
 int a, b, d, n;
 queue<ll> life, dead, mature;
-
+deque<ll> dq;
 int main()
 {
     fastio;
     cin >> a >> b >> d >> n;
-    ll sum = 0;
-    for (int i = 0; i < a-1; i++)
-    {
-        mature.push(0);
-    }
-    mature.push(1);
-    for (int i = 0; i < b-a; i++)
-    {
-        life.push(0);
-    }
     
-    for (int i = 0; i < d-b; i++)
+    for (int i = 0; i < d-1; i++)
     {
-        dead.push(0);
+        dq.push_front(0);
     }
+    dq.push_front(1);
+    int sum = 0;
     for (int i = 0; i <n; i++)
     {
-        ll adult = mature.front(); 
-        mature.pop();
-        sum += adult;
-        life.push(adult);
-
-        ll old = life.front();
-        life.pop();
-
-        sum -= old;
+        ll adult = dq[a-1];
+        sum += dq[a-1];
+        ll old = dq[b-1];
+        sum -= dq[b-1];
         sum = (sum+1000)%1000;
-        mature.push(sum);
-        dead.push(old);
-        dead.pop();
-        
+        dq.push_front(sum);
+        dq.pop_back();    
     }
-    while (!dead.empty())
+    int ret =0;
+    while (!dq.empty())
     {
-        sum += dead.front(); dead.pop();
-        sum %= 1000;
-    }
-    while (!mature.empty())
-    {
-        sum += mature.front(); mature.pop();
-        sum %= 1000;
+        ret += dq.front(); dq.pop_front();
+        ret %= 1000;
     }
     
     
-    cout << sum;
+    
+    cout << ret;
     
     
 
