@@ -32,7 +32,7 @@ def solve():
         for i in arr:
             if i == cur:
                 continue
-            if cur % i == 0 or cur == 0 or cur == 1:
+            if cur % i == 0:
                 return False
         return True
         
@@ -43,7 +43,7 @@ def solve():
             return
         
         if idx == 0:
-            start = 1
+            start = 2
         else:    
             start = 0
             
