@@ -12,7 +12,7 @@ def solve(left, right):
         return arr[left] + solve(left+1, right)
     else:
         l, r = left, right
-        while l <= r and arr[l] == arr[r]:
+        while l < r and arr[l] == arr[r]:
             l += 1 
             r -= 1
         if arr[l] < arr[r]:
@@ -21,10 +21,6 @@ def solve(left, right):
             return arr[right] + solve(left, right-1)
     
 ret = solve(0, n-1)
-cnt = 0
-for r in ret:
-    cnt += 1
-    print(r, end='')
-    if cnt == 80:
-        cnt = 0
-        print()
+
+for i in range(0, len(ret), 80):
+    print(ret[i:i+80])
