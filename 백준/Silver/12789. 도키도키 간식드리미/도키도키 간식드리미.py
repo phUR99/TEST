@@ -8,20 +8,12 @@ arr = list(map(int, input().strip().split()))
 order = 1
 s = []
 for a in arr:
-    if a == order:
+    s.append(a)
+    while s and s[-1] == order:
+        s.pop()
         order += 1
-    else:
-        while s and order == s[-1]:
-            s.pop()
-            order += 1
-        if a == order:
-            order += 1
-            continue
-        if not s or s[-1] > a:
-            s.append(a)
-        else:
-            print("Sad")
-            exit(0)
 
-
-print("Nice")
+if not s:
+    print("Nice")
+else:
+    print("Sad")
