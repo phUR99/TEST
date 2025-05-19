@@ -1,52 +1,43 @@
-#1. import queue로 library 사용 가능
-import queue
-#2. n, m 받기 가능
-n, m = map(int, input().split())   
-#3. 2차원 배열같은 경우 현재 형식으로 받기 가능
-board = [list(map(int, input().split())) for _ in range(n)]
-visit = [[False for j in range(m)] for _ in range(n)]
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
+import sys
+from collections import deque
 
-def bfs(i, j):
-    q = queue.Queue()
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
 
-    ret = 1
-    visit[i][j] = True
-    q.put([i, j])
-    while not q.empty() :
+n, m = map(int, input().strip().split())
+board = [list(map(int, input().strip().split())) for _ in range(n)]
+visited = [[False for _ in range(m)] for _ in range(n)]
 
-        x, y = q.get()
-
-        for dir in range(4):
-           nx = x + dx[dir] 
-           ny = y + dy[dir]
-           if nx < 0 or nx >= n or ny < 0 or ny >=m : continue
-           if visit[nx][ny] == True or board[nx][ny] == 0: continue
-           q.put([nx, ny])
-           visit[nx][ny] = True
-           ret +=1
-
-    return ret
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
 
-def solution():
+def bfs(x, y):
+    visited[x][y] = 1
+    cnt = 1
+    q = deque()
+    q.append((x, y))
+    while q:
+        hx, hy = q.popleft()
+        for i in range(4):
+            nx = hx + dx[i]
+            ny = hy + dy[i]
+            if nx < 0 or nx >= n or ny < 0 or ny >= m:
+                continue
+            if visited[nx][ny] or not board[nx][ny]:
+                continue
+            visited[nx][ny] = 1
+            cnt += 1
+            q.append((nx, ny))
+    return cnt
 
-    '''
-    for i in range(n) : 
-        for j in range(m) :
-            print(board[i][j], end=" ")
-        print()    
-    '''
-    cnt =0
-    maxArea =0
-    for i in range(n) : 
-        for j in range(m) :
-            if board[i][j] != 1 or visit[i][j] == True: continue
-            maxArea = max(maxArea, bfs(i, j))
-            cnt +=1
 
-    print(cnt, maxArea, sep='\n')
-
-
-solution()
+cnt = 0
+ret = 0
+for i in range(n):
+    for j in range(m):
+        if board[i][j] and not visited[i][j]:
+            cnt += 1
+            ret = max(ret, bfs(i, j))
+print(cnt)
+print(ret)
