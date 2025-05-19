@@ -55,9 +55,8 @@ for i in range(n):
                         continue
                     if visited[nx][ny]:
                         continue
-                    if (board[i][j] == "G" or board[i][j] == "R") and board[nx][
-                        ny
-                    ] != "B":
+                    # 연산자 우선순위
+                    if board[i][j] in "RG" and board[nx][ny] != "B":
                         visited[nx][ny] = True
                         q.append((nx, ny))
                     if board[i][j] == "B" and board[nx][ny] == "B":
