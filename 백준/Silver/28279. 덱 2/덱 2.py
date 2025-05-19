@@ -1,37 +1,26 @@
-from collections import deque
 import sys
-n = int(sys.stdin.readline().strip())
-arr =[list(map(int, sys.stdin.readline().strip().split())) for _ in range(n)]
+from collections import deque
+
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
 dq = deque()
-for a in arr:
-    if a[0] == 1:
-        dq.appendleft(a[1])
-    elif a[0] == 2:
-        dq.append(a[1])
-    elif a[0] == 3:
-        if dq:
-            print(dq.popleft())
-        else:
-            print(-1)
-    elif a[0] == 4:
-        if dq:
-            print(dq.pop())
-        else:
-            print(-1)
-    elif a[0] == 5:
+n = int(input().strip())
+
+for _ in range(n):
+    cur = list(map(int, input().strip().split()))
+    if cur[0] == 1:
+        dq.appendleft(cur[1])
+    elif cur[0] == 2:
+        dq.append(cur[1])
+    elif cur[0] == 3:
+        print(dq.popleft() if dq else -1)
+    elif cur[0] == 4:
+        print(dq.pop() if dq else -1)
+    elif cur[0] == 5:
         print(len(dq))
-    elif a[0] == 6:
-        if dq:
-            print(0)
-        else:
-            print(1)
-    elif a[0] == 7:
-        if dq:
-            print(dq[0])
-        else:
-            print(-1)
-    elif a[0] == 8:
-        if dq:
-            print(dq[-1])
-        else:
-            print(-1)
+    elif cur[0] == 6:
+        print(0 if dq else 1)
+    elif cur[0] == 7:
+        print(dq[0] if dq else -1)
+    elif cur[0] == 8:
+        print(dq[-1] if dq else -1)
