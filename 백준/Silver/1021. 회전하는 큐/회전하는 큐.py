@@ -11,12 +11,9 @@ arr = list(map(int, input().strip().split()))
 dq = deque([i + 1 for i in range(n)])
 ret = 0
 for a in arr:
-    l, r = (0, 0)
     mod = len(dq)
-    while dq[r % mod] != a:
-        r += 1
-    while dq[(-l + mod % mod)] != a:
-        l += 1
+    r = dq.index(a)
+    l = mod - r
     dir = min(l, r)
     if l > r:
         dq.rotate(l)
