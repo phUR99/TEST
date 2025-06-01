@@ -18,27 +18,16 @@ for _ in range(m):
 cache = [-1 for _ in range(n + 1)]
 
 
-def solve(start):
-
-    stack = [(start, False)]
-    while stack:
-        here, done = stack.pop()
-        if done:
-            l = 1
-            for nxt in adj[here]:
-                if heights[nxt] > heights[here]:
-                    l = max(l, 1 + cache[nxt])
-            cache[here] = l
-        else:
-            if cache[here] != -1:
-                continue
-            stack.append((here, True))
-            for nxt in adj[here]:
-                if heights[nxt] > heights[here] and cache[nxt] == -1:
-                    stack.append((nxt, False))
+def solve(here):
+    if cache[here] != -1:
+        return cache[here]
+    ret = 1
+    for there in adj[here]:
+        if heights[there] > heights[here]:
+            ret = max(ret, solve(there) + 1)
+    cache[here] = ret
+    return ret
 
 
 for i in range(1, n + 1):
-    if cache[i] == -1:
-        solve(i)
-    print(f"{cache[i]}\n")
+    print(f"{solve(i)}\n")
